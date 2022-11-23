@@ -1,5 +1,0 @@
-Włelo
-
-sadasd
-
-dasdasd
