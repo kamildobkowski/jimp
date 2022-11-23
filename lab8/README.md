@@ -1,1 +1,1 @@
-bsamnasm,dnasmbd
+bsamnasm,dnasmb
