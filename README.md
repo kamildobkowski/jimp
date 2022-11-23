@@ -1,2 +1,0 @@
-jebac witka
-skurwysyna
