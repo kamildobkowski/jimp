@@ -2,6 +2,7 @@
 #include <stdlib.h> // exit - ale exit trzeba kiedyś usunąć i nie będzie to potrzebne
 #include "alex.h"       // analizator leksykalny
 #include "fun_stack.h"  // stos funkcji
+#include "parser.h"
 
 #define MAXINDENTLENGHT 256     // maks długość identyfikatora
 
