@@ -12,7 +12,12 @@ void put_on_fun_stack(int par_level, char *funame)
     Node e;
     e->name = funame;
     e->parLevel = par_level;
+    e->next = *functionStack;
+    functionStack = &e;
 }
 char *get_from_fun_stack(void)
 {
+    Node e = *functionStack;
+    *functionStack = (*functionStack)->next;
+    return e;
 }
