@@ -20,3 +20,5 @@
 
 fun_stack.c - dodano funkcje
 fun_stack.h - dodano strukture
+parser.h - dodano strukture list_t
+parser.h - dodane prototypy funkcji store_add_*
