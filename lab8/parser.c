@@ -6,8 +6,7 @@
 
 #define MAXINDENTLENGHT 256 // maks długość identyfikatora
 
-void
-analizatorSkladni (char *inpname)
+void analizatorSkladni (char *inpname)
 {                               // przetwarza plik inpname
 
 	FILE *in = fopen(inpname, "r");
@@ -74,3 +73,15 @@ analizatorSkladni (char *inpname)
     lex = alex_nextLexem ();
   }
 }
+
+void store_add_def (char *top, int line_num, char* inpname) {
+
+}
+void store_add_proto(char *top, int line_num, char* inpname) {
+
+}
+void store_add_call(char *top, int line_num, char* inpname) {
+	
+}
+
+
