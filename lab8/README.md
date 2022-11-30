@@ -17,3 +17,6 @@
 | Funkcja main              |   x   |        | średni |                   |     3     |
 | lista funkcji pomijalnych |       |   x    | łatwy  |                   |     4     |
 | Formatowanie wypisywannia |   x   |        | łatwy  |                   |     4     |
+
+fun_stack.c - dodano funkcje
+fun_stack.h - dodano strukture
