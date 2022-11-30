@@ -26,7 +26,7 @@ void analizatorSkladni (char *inpname)
         lexem_t nlex = alex_nextLexem ();
         if (nlex == OPEPAR) {   // nawias otwierający - to zapewne funkcja
           npar++;
-          put_on_fun_stack (npar, iname);       // odłóż na stos funkcji
+          put_on_fun_stack (npar, iname);       // odłóż na stos funkcje i bilans nawiasów
                                                 // stos f. jest niezbędny, aby poprawnie obsłużyć sytuacje typu
                                                 // f1( 5, f2( a ), f3( b ) )
         }
@@ -57,9 +57,11 @@ void analizatorSkladni (char *inpname)
     case OPEBRA:
       nbra++;
       break;
-    case CLOBRA:
-      nbra--;
-      break;
+    case CLOBRA:{
+        nbra--;
+        
+    }
+        break;
     case ERROR:{
         fprintf (stderr, "\nBUUUUUUUUUUUUUUUUUUUUUU!\n"
                  "W pliku %s (linia %d) są błędy składni.\n"
