@@ -5,7 +5,7 @@ typedef struct e
 {
     char *name;
     int parLevel;
-    struct e *next;
+    struct e *next; 
 } *Node;
 
 Node *functionStack;
