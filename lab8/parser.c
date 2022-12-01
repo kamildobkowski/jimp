@@ -6,6 +6,9 @@
 
 #define MAXINDENTLENGHT 256 // maks długość identyfikatora
 
+list_t *list = NULL;
+list_t *tail = &list;
+
 void analizatorSkladni (char *inpname)
 {                               // przetwarza plik inpname
 
@@ -78,7 +81,10 @@ void analizatorSkladni (char *inpname)
 
 void store_add_def(char *top, int line_num, char* inpname)
 {
-
+	listElem_t* newElem = malloc(sizeof(listElem_t));
+	newElem->name=top;
+	newElem->File=inpname;
+	newElem-
 }
 void store_add_proto(char *top, int line_num, char* inpname) {
 
@@ -88,3 +94,18 @@ void store_add_call(char *top, int line_num, char* inpname) {
 }
 
 
+/*FILO
+
+typdef struct element {
+	int value;
+	struct element * next;
+} * node;
+
+node head = NULL;
+
+addElement(node newElement){
+	if
+}
+
+
+[] [] */

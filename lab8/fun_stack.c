@@ -7,11 +7,12 @@ int top_of_funstack(void)
 }
 
 // odkłada na stos parę (funame, par_level)
-void put_on_fun_stack(int par_level, char *funame)
+void put_on_fun_stack(char *funame, int par_level, int bra_level)
 {
     Node e;
     e->name = funame;
     e->parLevel = par_level;
+    e->braLevel = bra_level;
     e->next = *functionStack;
     functionStack = &e;
 }
