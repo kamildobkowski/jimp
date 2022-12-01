@@ -1,14 +1,18 @@
 #ifndef _PARSER_H_IS_INCLUDED
 #define _PARSER_H_IS_INCLUDED
 
+typedef struct lines{
+    int start;
+    int end;
+    struct lines * next;
+} *lines_t;
+
 typedef struct e {
     char* name;
-    int protLine;
-    char* protFile;
-    int defLine;
-    char* defFile;
-    struct e *call;
-    struct e *next;
+    lines_t linie;
+    char* File; //
+    char *callName; //lista wywolan
+    struct e *next; //wskaznik na nastepny element
 } list_t;
 
 void analizatorSkladni(char *inpname);
