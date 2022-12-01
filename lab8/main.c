@@ -7,6 +7,7 @@
 
 int main(int argc, char **argv)
 {
+    int i = 0;
     // Zdefiniowanie rozmiaru dla struktury functionStack (fun_stack.h)
     // Sprawdzenie działania fun_stack.c
 
@@ -16,4 +17,7 @@ int main(int argc, char **argv)
     // sprawdzenie działania parser.c
 
     // Wczytanie plików z argv 
+    for(i=1; i<argc; i++) {
+        analizatorSkladni(argv[i]);
+    }
 }
