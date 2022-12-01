@@ -7,7 +7,6 @@ typedef struct e
     int parLevel;
     int braLevel;
     struct e *next;
-
 } *Node;
 
 Node *functionStack;
