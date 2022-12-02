@@ -52,9 +52,15 @@ void analizatorSkladni (char *inpname)
 			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listDef);
 		  else if (nbra == 0){ // nast. leksem to nie { i jesteśmy poza blokami - to musi być prototyp
 			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listProto);
+			shift_from_fun_stack();
 		  }
 		  else{ // nast. leksem to nie { i jesteśmy wewnątrz bloku - to zapewne wywołanie
 			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listCall);
+			Node *tmpStack = get_fun_stack();
+			while() {
+				
+			}
+			shift_from_fun_stack();
 		  }
 		}
 		npar--;
@@ -63,9 +69,9 @@ void analizatorSkladni (char *inpname)
 	case OPEBRA:
 	  nbra++;
 	  break;
-	case CLOBRA:{
-		//TU TRZEBA JESZCZE COŚ ZROBIĆ
-		// KONIEC DEFINICJI
+	case CLOBRA: {
+		
+		shift_from_fun_stack();
 		nbra--;
 		break;
 		
@@ -115,7 +121,6 @@ void addLinesElem(linesNode_t** lines, linesNode_t* element) {
 	}
 }
 
-
 void store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list){
 	linesNode_t* lines = malloc(sizeof(*lines));
 	listNode_t* lista = malloc(sizeof(*lista));
@@ -127,4 +132,14 @@ void store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list){
 	lista->linesHead = NULL;
 	addLinesElem(lista->linesHead, lines);
 	addListElem(listDef, lista);
+}
+
+void addEndOfDef(listNode_t ** list, char* top, int line_num) {
+	listNode_t ** tmp = list;
+	while(tmp!=NULL && (*tmp)->name!=top) {
+		tmp = (*tmp)->next;
+	}
+	if(tmp==NULL) return;
+	linesNode_t ** linesTmp = (*tmp)->linesHead;
+	(*linesTmp)->end=line_num;
 }
