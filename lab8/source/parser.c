@@ -138,7 +138,6 @@ void addCallElem(callNode_t** call, char* element) {
 			tmp=tmp->next;
 		}
 		tmp->name=element;
-		tmp->ile=1;
 		tmp->next=NULL;
  	}
 }
