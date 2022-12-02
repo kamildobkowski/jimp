@@ -15,7 +15,7 @@ typedef enum lexem
     CLOBRA, // klamra zamykająca
     IDENT,  // identyfikator funkcji
     OPEPAR, // nawias otwierajacy
-    CLOPAR  // nawias zamykający
+    CLOPAR, // nawias zamykający
 } lexem_t;
 
 void alex_init4file(FILE *);  // zacznij czytać nowy plik
