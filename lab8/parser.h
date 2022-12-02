@@ -5,11 +5,11 @@ typedef struct lines{
     int start;
     int end;
     struct lines * next;
-} *linesNode;
+} linesNode;
 
 typedef struct {
-    struct linesNode head;
-    struct linesNode tail;
+    linesNode *head;
+    linesNode *tail;
 } * lines_t;
 
 typedef struct e {
@@ -18,11 +18,11 @@ typedef struct e {
     char* File; //
     char* callName; //lista wywolan
     struct e *next; //wskaznik na nastepny element
-} listElem_t;
+} listNode_t;
 
 typedef struct list {
-    struct listElem_t* head;
-    struct listElem_t* tail;
+    listNode_t* head;
+    listNode_t* tail;
 } list_t;
 
 

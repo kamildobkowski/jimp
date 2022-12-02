@@ -6,8 +6,9 @@
 
 #define MAXINDENTLENGHT 256 // maks długość identyfikatora
 
-list_t *list = NULL;
-list_t *tail = &list;
+list_t* listDef;
+list_t* listProto;
+list_t* listCall;
 
 void analizatorSkladni (char *inpname)
 {                               // przetwarza plik inpname
@@ -79,12 +80,45 @@ void analizatorSkladni (char *inpname)
   }
 }
 
+void addListElem(list_t* lista, listNode_t* element) {
+	if(lista->head == NULL) {
+		lista->head=element;
+		lista->head->next=NULL;
+		lista->tail=lista->head;
+	}
+	else {
+		list_t* tmp = lista->tail;
+		lista->tail->next=element;
+		lista->tail=lista->tail->next;
+	}
+}
+
+void addLinesElem() {
+
+}
+
 void store_add_def(char *top, int line_num, char* inpname)
 {
-	listElem_t* newElem = malloc(sizeof(listElem_t));
+	listNode_t* newElem = malloc(sizeof(listNode_t));
+	linesNode* newLinesElem = malloc(sizeof(linesNode));
+	newLinesElem->start = line_num;
+	newLinesElem->end = line_num;
 	newElem->name=top;
 	newElem->File=inpname;
-	newElem-
+	newElem->
+	listNode_t* tmp = listDef->head;
+	while(tmp!=NULL) {
+		if(tmp->name == top) {
+			
+			return;
+		}
+		tmp=tmp->next;
+	}
+	tmp=newElem;
+	tmp->next = NULL;
+	listDef->tail = tmp;
+
+	
 }
 void store_add_proto(char *top, int line_num, char* inpname) {
 
