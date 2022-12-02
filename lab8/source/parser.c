@@ -123,8 +123,19 @@ void addLinesElem(linesNode_t** lines, linesNode_t* element) {
 	}
 }
 
-void addCallElem(callNode_t call, char* element) {
-
+void addCallElem(callNode_t** call, char* element) {
+	if(call==NULL) {
+		(*call)->name=element;
+		(*call)->next=NULL;
+	}
+	else {
+		callNode_t* tmp = call;
+		while(tmp!=NULL) {
+			tmp=tmp->next;
+		}
+		tmp->name=element;
+		tmp->next=NULL;
+ 	}
 }
 
 void store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list){
