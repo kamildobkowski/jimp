@@ -7,6 +7,8 @@
 
 int main(int argc, char **argv)
 {
+    printf("Testowany plik: %s\n", argv[1]);
+
     int i = 0;
     // Sprawdzenie działania fun_stack.c
 
