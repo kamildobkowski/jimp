@@ -1,37 +1,29 @@
-#include <stdlib.h>
 #include "../include/fun_stack.h"
+
+#include <stdlib.h>
 // Funckje struktury Stosu
 
 Node *funStack;
 
-void initFunctionStack()
-{
+void initFunctionStack() {
     Node *funStack = malloc(sizeof(*funStack));
     *funStack = NULL;
 }
 
 // zwraca par_level - "zagłębienie nawiasowe" przechowywane na szczycie
-int top_of_funstack(void)
-{
-    return (*funStack)->parLevel;
-}
+int top_of_funstack(void) { return (*funStack)->parLevel; }
 
 // odkłada na stos parę (funame, par_level, bra_level)
-void put_on_fun_stack(char *funame, int par_level, int bra_level)
-{
+void put_on_fun_stack(char *funame, int par_level, int bra_level) {
     Node e = initNode(funame, par_level, bra_level);
     e->next = *funStack;
     (*funStack) = e;
 }
 
 // Pobiera ze stosu element zarazem go usuwając
-char *get_from_fun_stack(void)
-{
-    return (*funStack)->name;
-}
+char *get_from_fun_stack(void) { return (*funStack)->name; }
 
-void shift_from_fun_stack()
-{
+void shift_from_fun_stack() {
     Node temp = (*funStack);
     (*funStack) = (*funStack)->next;
     temp->next = NULL;
@@ -41,8 +33,7 @@ void shift_from_fun_stack()
 // Funkcje struktury Node
 
 // Inicjacja elementu stosu
-Node initNode(char *funame, int par_level, int bra_level)
-{
+Node initNode(char *funame, int par_level, int bra_level) {
     Node e = malloc(sizeof(*e));
     e->name = funame;
     e->parLevel = par_level;
@@ -52,12 +43,6 @@ Node initNode(char *funame, int par_level, int bra_level)
 }
 
 // Zwraca Stos funkcji
-Node *get_fun_stack()
-{
-    return funStack;
-}
+Node *get_fun_stack() { return funStack; }
 
-void freeElements()
-{
-    free(funStack);
-}
+void freeElements() { free(funStack); }
