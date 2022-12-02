@@ -1,6 +1,8 @@
 #include <stdlib.h>
-#include "fun_stack.h"
+#include "../include/fun_stack.h"
 // Funckje struktury Stosu
+
+Node *funStack;
 
 Node *initFunctionStac()
 {
@@ -23,11 +25,17 @@ void put_on_fun_stack(char *funame, int par_level, int bra_level)
 }
 
 // Pobiera ze stosu element zarazem go usuwając
-Node get_from_fun_stack(void)
+char *get_from_fun_stack(void)
 {
-    Node e = *funStack;
-    *funStack = (*funStack)->next;
-    return e;
+    return (*funStack)->name;
+}
+
+void shift_from_fun_stack()
+{
+    Node temp = (*funStack);
+    (*funStack) = (*funStack)->next;
+    temp->next = NULL;
+    free(temp);
 }
 
 // Funkcje struktury Node

@@ -14,8 +14,6 @@ typedef struct e
     struct e *next;
 } *Node;
 
-Node *functionStack;
-
 // Funkcje dotyczące struktury Node
 
 // Inicjacja elementu stosu
