@@ -6,16 +6,16 @@
 // interesujące leksemy: błąd, inny symbol, koniec pliku, otwierająca klamra {,
 //                       zamykająca klamra }, identyfikator, otwierający nawias,
 //                       zamykający nawias
-typedef enum
+typedef enum lexem
 {
-    ERROR,
-    OTHER,
-    EOFILE,
-    OPEBRA,
-    CLOBRA,
-    IDENT,
-    OPEPAR,
-    CLOPAR
+    ERROR,  // błąd
+    OTHER,  // inny
+    EOFILE, // koniec pliku
+    OPEBRA, // klamra otwierajaca
+    CLOBRA, // klamra zamykająca
+    IDENT,  // identyfikator funkcji
+    OPEPAR, // nawias otwierajacy
+    CLOPAR  // nawias zamykający
 } lexem_t;
 
 void alex_init4file(FILE *);  // zacznij czytać nowy plik
