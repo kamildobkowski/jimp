@@ -58,8 +58,7 @@ void analizatorSkladni (char *inpname)
 			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listCall);
 			Node *tmpStack = get_fun_stack();
 			while(tmpStack!=NULL) {
-
-
+				store_add_call(get_from_fun_stack, (*tmpStack)->name, listCall);
 				tmpStack=(*tmpStack)->next;
 			}
 			shift_from_fun_stack();
@@ -126,14 +125,20 @@ void addLinesElem(linesNode_t** lines, linesNode_t* element) {
 void addCallElem(callNode_t** call, char* element) {
 	if(call==NULL) {
 		(*call)->name=element;
+		(*call)->ile=1;
 		(*call)->next=NULL;
 	}
 	else {
 		callNode_t* tmp = call;
 		while(tmp!=NULL) {
+			if(tmp->name==element) {
+				tmp->ile++;
+				return;
+			}
 			tmp=tmp->next;
 		}
 		tmp->name=element;
+		tmp->ile=1;
 		tmp->next=NULL;
  	}
 }
@@ -161,8 +166,13 @@ void addEndOfDef(listNode_t ** list, char* top, int line_num) {
 	(*linesTmp)->end=line_num;
 }
 
-void store_add_call(char* top) {
-	
+void store_add_call(char* top, char* name, listNode_t** lista) {
+	listNode_t **tmp = lista;
+	while(tmp!=NULL) {
+		if((*tmp)->name==name) {
+			addCallElem(tmp, top);
+		}
+	}
 }
 //zwraca liste definicji
 listNode_t** getListDef() {

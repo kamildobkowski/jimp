@@ -9,6 +9,7 @@ typedef struct lines {
 
 typedef struct call {
     char name;
+    int ile;
     struct call* next;
 } callNode_t;
 
