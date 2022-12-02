@@ -1,37 +1,28 @@
 #ifndef _PARSER_H_IS_INCLUDED
 #define _PARSER_H_IS_INCLUDED
 
-typedef struct lines
-{
+typedef struct lines{
     int start;
     int end;
-    struct lines *next;
-} *linesNode;
+    struct lines * next;
+} linesNode_t;
 
-typedef struct
-{
-    struct linesNode head;
-    struct linesNode tail;
-} *lines_t;
 
-typedef struct e
-{
-    char *name;
-    lines_t lines_t;
-    char *File;     //
-    char *callName; // lista wywolan
-    struct e *next; // wskaznik na nastepny element
-} listElem_t;
+typedef struct e {
+    char * name;
+    linesNode_t ** linesHead;
+    char * File; // Dupa
+    char ** callName; //lista wywolan
+    struct e *next; //wskaznik na nastepny element
+} listNode_t;
 
-typedef struct list
-{
-    struct listElem_t *head;
-    struct listElem_t *tail;
-} list_t;
 
-void analizatorSkladni(char *inpname);
-void store_add_def(char *top, int lineNum, char *inpname);   // dodaje definicje do listy
-void store_add_proto(char *top, int lineNum, char *inpname); // dodaje prototyp do listy
-void store_add_call(char *top, int lineNum, char *inpname);  // dodaje wywołania do listy
-void addListElem();
+
+
+
+
+void analizatorSkladni(char *inpname); 
+void store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list); //
+void addListElem(listNode_t** lista, listNode_t* element);
+void addLinesElem(linesNode_t** lines, linesNode_t* element);
 #endif

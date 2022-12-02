@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>	   // exit - ale exit trzeba kiedyś usunąć i nie będzie to potrzebne
-#include "alex.h"	   // analizator leksykalny
-#include "fun_stack.h" // stos funkcji
-#include "parser.h"
+#include "../include/alex.h"	   // analizator leksykalny
+#include "../include/fun_stack.h" // stos funkcji
+#include "../include/parser.h"
 
 #define MAXINDENTLENGHT 256 // maks długość identyfikatora
 
-list_t* listDef;
-list_t* listProto;
-list_t* listCall;
+listNode_t ** listDef;
+listNode_t ** listProto;
+listNode_t ** listCall;
 
 void analizatorSkladni (char *inpname)
 {                               // przetwarza plik inpname
@@ -49,11 +49,13 @@ void analizatorSkladni (char *inpname)
 												// za identyfikatorem znajdującym się na wierzchołku stosu
 		  lexem_t nlex = alex_nextLexem ();     // bierzemy nast leksem
 		  if (nlex == OPEBRA)   // nast. leksem to klamra a więc mamy do czynienia z def. funkcji
-			store_add_def (get_from_fun_stack (), alex_getLN (), inpname);
+			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listDef);
 		  else if (nbra == 0)   // nast. leksem to nie { i jesteśmy poza blokami - to musi być prototyp
-			store_add_proto (get_from_fun_stack (), alex_getLN (), inpname);
-		  else                  // nast. leksem to nie { i jesteśmy wewnątrz bloku - to zapewne wywołanie
-			store_add_call (get_from_fun_stack (), alex_getLN (), inpname);
+			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listProto);
+		  else{// nast. leksem to nie { i jesteśmy wewnątrz bloku - to zapewne wywołanie
+		  	
+			store_add_fun(get_from_fun_stack (), alex_getLN (), inpname, listCall);
+		  }
 		}
 		npar--;
 	  }
@@ -62,15 +64,17 @@ void analizatorSkladni (char *inpname)
 	  nbra++;
 	  break;
 	case CLOBRA:{
+		//TU TRZEBA JESZCZE COŚ ZROBIĆ
 		nbra--;
+		break;
 		
 	}
-		break;
 	case ERROR:{
 		fprintf (stderr, "\nBUUUUUUUUUUUUUUUUUUUUUU!\n"
 				 "W pliku %s (linia %d) są błędy składni.\n"
 				 "Kończę!\n\n", inpname, alex_getNL ());
-		exit (1);               // to nie jest najlepsze, ale jest proste ;-)
+		//free
+		return;
 	  }
 	  break;
 	default:
@@ -80,66 +84,46 @@ void analizatorSkladni (char *inpname)
   }
 }
 
-void addListElem(list_t* lista, listNode_t* element) {
-	if(lista->head == NULL) {
-		lista->head=element;
-		lista->head->next=NULL;
-		lista->tail=lista->head;
+void addListElem(listNode_t** lista, listNode_t* element) {
+	if(lista == NULL) {
+		*lista = element;
+		(*lista)->next = NULL;
 	}
 	else {
-		list_t* tmp = lista->tail;
-		lista->tail->next=element;
-		lista->tail=lista->tail->next;
-	}
-}
-
-void addLinesElem() {
-
-}
-
-void store_add_def(char *top, int line_num, char* inpname)
-{
-	listNode_t* newElem = malloc(sizeof(listNode_t));
-	linesNode* newLinesElem = malloc(sizeof(linesNode));
-	newLinesElem->start = line_num;
-	newLinesElem->end = line_num;
-	newElem->name=top;
-	newElem->File=inpname;
-	newElem->
-	listNode_t* tmp = listDef->head;
-	while(tmp!=NULL) {
-		if(tmp->name == top) {
-			
-			return;
+		listNode_t* tmp = *lista;
+		while(tmp!=NULL) {
+			tmp=tmp->next;
 		}
-		tmp=tmp->next;
+		tmp = element;
+		tmp->next=NULL;
 	}
-	tmp=newElem;
-	tmp->next = NULL;
-	listDef->tail = tmp;
-
-	
-}
-void store_add_proto(char *top, int line_num, char* inpname) {
-
-}
-void store_add_call(char *top, int line_num, char* inpname) {
-	
 }
 
-
-/*FILO
-
-typdef struct element {
-	int value;
-	struct element * next;
-} * node;
-
-node head = NULL;
-
-addElement(node newElement){
-	if
+void addLinesElem(linesNode_t** lines, linesNode_t* element) {
+	if(lines==NULL) {
+		*lines=element;
+		(*lines)->next=NULL;
+	}
+	else {
+		linesNode_t* tmp = lines;
+		while(tmp!=NULL) {
+			tmp=tmp->next;
+		}
+		tmp=element;
+		tmp->next=NULL;
+	}
 }
 
 
-[] [] */
+void store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list){
+	linesNode_t* lines = malloc(sizeof(*lines));
+	listNode_t* lista = malloc(sizeof(*lista));
+	lines->start=line_num;
+	lines->end=line_num;
+	lines->next=NULL;
+	lista->name=top;
+	lista->File = inpname;
+	lista->linesHead = NULL;
+	addLinesElem(lista->linesHead, lines);
+	addListElem(listDef, lista);
+}
