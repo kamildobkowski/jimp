@@ -18,11 +18,10 @@ void printFile(char *inputName)
 void printPrototype(listNode_t *function)
 {
     printf("Prototypy:\n");
-    while (/* condition */)
+    while (1)
     {
         /* code */
     }
-    
 }
 
 void printDefinition(listNode_t *function)

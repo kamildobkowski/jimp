@@ -4,10 +4,10 @@
 
 Node *funStack;
 
-Node *initFunctionStac()
+Node *initFunctionStack()
 {
-    Node *fS = malloc(sizeof(*fS));
-    *fS = NULL;
+    Node *funStack = malloc(sizeof(*funStack));
+    *funStack = NULL;
 }
 
 // zwraca par_level - "zagłębienie nawiasowe" przechowywane na szczycie
@@ -21,7 +21,7 @@ void put_on_fun_stack(char *funame, int par_level, int bra_level)
 {
     Node e = initNode(funame, par_level, bra_level);
     e->next = *funStack;
-    funStack = &e;
+    (*funStack) = e;
 }
 
 // Pobiera ze stosu element zarazem go usuwając
