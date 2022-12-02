@@ -6,20 +6,35 @@
 void printFile(char *inputName)
 {
     printf("Analizator składni dla pliku: [%s]\n", inputName);
-    // listNode_t * tempList = *listProto;
+    listNode_t *tempList = *getListProto();
+    while (tempList != NULL)
+    {
+        printf("Funkcja [%s]\n", tempList->name);
+        printPrototype(tempList);
+        tempList = tempList->next;
+    }
 }
 
-void printDefinition()
+void printPrototype(listNode_t *function)
 {
-}
-void printSelfCall()
-{
+    printf("Prototypy:\n");
+    while (/* condition */)
+    {
+        /* code */
+    }
+    
 }
 
-void printPrototype()
+void printDefinition(listNode_t *function)
 {
+    printf("Definicje:\n");
+}
+void printSelfCall(listNode_t *function)
+{
+    printf("Użycia:\n");
 }
 
-void printSomeCall()
+void printSomeCall(listNode_t *function)
 {
+    printf("Wywołuje:\n");
 }
