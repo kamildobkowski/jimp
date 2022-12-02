@@ -21,4 +21,7 @@ int main(int argc, char **argv)
     for (i = 1; i < argc; i++) {
         analizatorSkladni(argv[i]);
     }
+    freeList(getListDef());
+    freeList(getListCall());
+    freeList(getListProto());
 }
