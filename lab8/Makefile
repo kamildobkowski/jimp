@@ -5,8 +5,9 @@ CFLAGS=-I$(IDIR)
 ODIR=./out
 LDIR =./lib
 SDIR=./source
+TDIR=./testSourceFile
 
-LIBS=-lm
+# LIBS=-lm # Można dodać dla math.c
 
 _DEPS = alex.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
@@ -37,5 +38,10 @@ clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 
 test-easy:
-	lib/test.out main.c
+	for FILE in $(TDIR)/*.c ; do \
+		$(LDIR)/test.out $$FILE ; \
+	done
+	for FILE in $(TDIR)/*.h ; do \
+		$(LDIR)/test.out $$FILE ; \
+	done
 
