@@ -50,11 +50,11 @@ void analizatorSkladni (char *inpname)
 		  lexem_t nlex = alex_nextLexem ();     // bierzemy nast leksem
 		  if (nlex == OPEBRA)   // nast. leksem to klamra a więc mamy do czynienia z def. funkcji
 			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listDef);
-		  else if (nbra == 0)   // nast. leksem to nie { i jesteśmy poza blokami - to musi być prototyp
+		  else if (nbra == 0){ // nast. leksem to nie { i jesteśmy poza blokami - to musi być prototyp
 			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listProto);
-		  else{// nast. leksem to nie { i jesteśmy wewnątrz bloku - to zapewne wywołanie
-		  	
-			store_add_fun(get_from_fun_stack (), alex_getLN (), inpname, listCall);
+		  }
+		  else{ // nast. leksem to nie { i jesteśmy wewnątrz bloku - to zapewne wywołanie
+			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listCall);
 		  }
 		}
 		npar--;
@@ -65,6 +65,7 @@ void analizatorSkladni (char *inpname)
 	  break;
 	case CLOBRA:{
 		//TU TRZEBA JESZCZE COŚ ZROBIĆ
+		// KONIEC DEFINICJI
 		nbra--;
 		break;
 		
