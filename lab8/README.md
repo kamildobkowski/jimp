@@ -1,13 +1,11 @@
 # Analizator składni
 
-## JIMP zadanie z laboratorium nr 8
+> ## JIMP zadanie z laboratorium nr 8
 
 <br/>
 <br/>
 
-### Podział obowiązków
-
-<br/>
+> ## Podział obowiązków
 
 | Zadanie \ Osoba           | Kamil | Adrian | Poziom | Stopień Wykonania | Priorytet |
 | ------------------------- | :---: | :----: | :----: | :---------------: | :-------: |
@@ -18,7 +16,27 @@
 | lista funkcji pomijalnych |       |   x    | łatwy  |                   |     4     |
 | Formatowanie wypisywannia |   x   |        | łatwy  |                   |     4     |
 
-fun_stack.c - dodano funkcje
-fun_stack.h - dodano strukture
-parser.h - dodano strukture list_t
-parser.h - dodane prototypy funkcji store_add_*
+_funstack.c - dodano funkcje\
+ fun_stack.h - dodano strukture\
+ parser.h - dodano strukture list_t\
+ parser.h - dodane prototypy funkcji store_add_
+
+<br/>
+
+> ## Uruchomianie
+>
+> -   Programu\
+>     W konsoli obsługującek Makefile oraz kompiler c wpisz
+>
+> ```bash
+>    make easy-init
+>    make
+> ```
+>
+> -   Testu
+>
+> ```bash
+>    make test-easy
+> ```
+>
+> \*

@@ -27,10 +27,14 @@ lib/test.out: $(TEST)
 # 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 
-.PHONY: clean test-easy
+.PHONY: easy-init clean test-easy
+
+easy-init:
+	mkdir -p include lib out
 
 clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 
 test-easy:
 	lib/test.out main.c
+
