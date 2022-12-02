@@ -50,3 +50,9 @@ Node initNode(char *funame, int par_level, int bra_level)
     e->next = NULL;
     return e;
 }
+
+// Zwraca Stos funkcji
+Node *get_fun_stack()
+{
+    return funStack;
+}
