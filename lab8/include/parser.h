@@ -24,4 +24,7 @@ void analizatorSkladni(char *inpname);
 void store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list); //
 void addListElem(listNode_t** lista, listNode_t* element);
 void addLinesElem(linesNode_t** lines, linesNode_t* element);
+listNode_t** getListDef();
+listNode_t** getListCall();
+listNode_t** getListProto();
 #endif
