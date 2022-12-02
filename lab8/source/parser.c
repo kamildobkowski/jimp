@@ -1,17 +1,17 @@
 #include <stdio.h>
-#include <stdlib.h>				  // exit - ale exit trzeba kiedyś usunąć i nie będzie to potrzebne
-#include "../include/alex.h"	  // analizator leksykalny
+#include <stdlib.h>	   // exit - ale exit trzeba kiedyś usunąć i nie będzie to potrzebne
+#include "../include/alex.h"	   // analizator leksykalny
 #include "../include/fun_stack.h" // stos funkcji
 #include "../include/parser.h"
 
 #define MAXINDENTLENGHT 256 // maks długość identyfikatora
 
-listNode_t **listDef;
-listNode_t **listProto;
-listNode_t **listCall;
+listNode_t ** listDef;
+listNode_t ** listProto;
+listNode_t ** listCall;
 
-void analizatorSkladni(char *inpname)
-{ // przetwarza plik inpname
+void analizatorSkladni (char *inpname)
+{                               // przetwarza plik inpname
 
 	FILE *in = fopen(inpname, "r");
 
@@ -22,27 +22,21 @@ void analizatorSkladni(char *inpname)
 
 	lexem_t lex;
 
-	lex = alex_nextLexem(); // pobierz następny leksem
-	while (lex != EOFILE)
-	{
-		switch (lex)
-		{
-		case IDENT:
-		{
-			char *iname = alex_ident(); // zapamiętaj identyfikator i patrz co dalej
-			lexem_t nlex = alex_nextLexem();
-			if (nlex == OPEPAR)
-			{ // nawias otwierający - to zapewne funkcja
-				npar++;
-				put_on_fun_stack(iname, npar, nbra); // odłóż na stos funkcje i bilans nawiasów
-													 // stos f. jest niezbędny, aby poprawnie obsłużyć sytuacje typu
-													 // f1( 5, f2( a ), f3( b ) )
-			}
-			else
-			{ // nie nawias, czyli nie funkcja
-				lex = nlex;
-				continue;
-			}
+  lex = alex_nextLexem ();      // pobierz następny leksem
+  while (lex != EOFILE) {
+	switch (lex) {
+	case IDENT:{
+		char *iname = alex_ident ();   // zapamiętaj identyfikator i patrz co dalej
+		lexem_t nlex = alex_nextLexem ();
+		if (nlex == OPEPAR) {   // nawias otwierający - to zapewne funkcja
+		  npar++;
+		  put_on_fun_stack (iname, npar, nbra);	// odłóż na stos funkcje i bilans nawiasów
+												// stos f. jest niezbędny, aby poprawnie obsłużyć sytuacje typu
+												// f1( 5, f2( a ), f3( b ) )
+		}
+		else {                  // nie nawias, czyli nie funkcja
+		  lex = nlex;
+		  continue;
 		}
 	  }
 	  break;
@@ -63,8 +57,10 @@ void analizatorSkladni(char *inpname)
 		  else{ // nast. leksem to nie { i jesteśmy wewnątrz bloku - to zapewne wywołanie
 			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listCall);
 			Node *tmpStack = get_fun_stack();
-			while() {
-				
+			while(tmpStack!=NULL) {
+
+
+				tmpStack=(*tmpStack)->next;
 			}
 			shift_from_fun_stack();
 		  }
@@ -93,44 +89,42 @@ void analizatorSkladni(char *inpname)
 	default:
 	  break;
 	}
+	lex = alex_nextLexem ();
+  }
 }
 
-void addListElem(listNode_t **lista, listNode_t *element)
-{
-	if (lista == NULL)
-	{
+void addListElem(listNode_t** lista, listNode_t* element) {
+	if(lista == NULL) {
 		*lista = element;
 		(*lista)->next = NULL;
 	}
-	else
-	{
-		listNode_t *tmp = *lista;
-		while (tmp != NULL)
-		{
-			tmp = tmp->next;
+	else {
+		listNode_t* tmp = *lista;
+		while(tmp!=NULL) {
+			tmp=tmp->next;
 		}
 		tmp = element;
-		tmp->next = NULL;
+		tmp->next=NULL;
 	}
 }
 
-void addLinesElem(linesNode_t **lines, linesNode_t *element)
-{
-	if (lines == NULL)
-	{
-		*lines = element;
-		(*lines)->next = NULL;
+void addLinesElem(linesNode_t** lines, linesNode_t* element) {
+	if(lines==NULL) {
+		*lines=element;
+		(*lines)->next=NULL;
 	}
-	else
-	{
-		linesNode_t *tmp = lines;
-		while (tmp != NULL)
-		{
-			tmp = tmp->next;
+	else {
+		linesNode_t* tmp = lines;
+		while(tmp!=NULL) {
+			tmp=tmp->next;
 		}
-		tmp = element;
-		tmp->next = NULL;
+		tmp=element;
+		tmp->next=NULL;
 	}
+}
+
+void addCallElem(callNode_t call, char* element) {
+
 }
 
 void store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list){
@@ -145,7 +139,7 @@ void store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list){
 	addLinesElem(lista->linesHead, lines);
 	addListElem(listDef, lista);
 }
-
+//dodaje linie konczaca definicje do listy
 void addEndOfDef(listNode_t ** list, char* top, int line_num) {
 	listNode_t ** tmp = list;
 	while(tmp!=NULL && (*tmp)->name!=top) {
@@ -154,4 +148,20 @@ void addEndOfDef(listNode_t ** list, char* top, int line_num) {
 	if(tmp==NULL) return;
 	linesNode_t ** linesTmp = (*tmp)->linesHead;
 	(*linesTmp)->end=line_num;
+}
+
+void store_add_call(char* top) {
+	
+}
+//zwraca liste definicji
+listNode_t** getListDef() {
+	return listDef;
+}
+//zwraca liste wywolan
+listNode_t** getListCall() {
+	return listCall;
+}
+//zwrata liste prototypow
+listNode_t** getListProto() {
+	return listProto;
 }
