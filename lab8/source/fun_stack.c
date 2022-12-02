@@ -4,7 +4,7 @@
 
 Node *funStack;
 
-Node *initFunctionStack()
+void initFunctionStack()
 {
     Node *funStack = malloc(sizeof(*funStack));
     *funStack = NULL;
@@ -55,4 +55,9 @@ Node initNode(char *funame, int par_level, int bra_level)
 Node *get_fun_stack()
 {
     return funStack;
+}
+
+void freeElements()
+{
+    free(funStack);
 }
