@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>	   // exit - ale exit trzeba kiedyś usunąć i nie będzie to potrzebne
+#include <string.h>
 #include "../include/alex.h"	   // analizator leksykalny
 #include "../include/fun_stack.h" // stos funkcji
 #include "../include/parser.h"
@@ -12,7 +13,6 @@ listNode_t ** listCall;
 
 void analizatorSkladni (char *inpname)
 {                               // przetwarza plik inpname
-
 	FILE *in = fopen(inpname, "r");
 
 	int nbra = 0; // bilans nawiasów klamrowych {}
@@ -48,10 +48,19 @@ void analizatorSkladni (char *inpname)
 												// jeśli tak, to właśnie wczytany nawias jest domknięciem nawiasu otwartego
 												// za identyfikatorem znajdującym się na wierzchołku stosu
 		  lexem_t nlex = alex_nextLexem ();     // bierzemy nast leksem
-		  if (nlex == OPEBRA)   // nast. leksem to klamra a więc mamy do czynienia z def. funkcji
-			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listDef);
+		  if (nlex == OPEBRA){ // nast. leksem to klamra a więc mamy do czynienia z def. funkcji
+				if(store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listDef) == 2){
+					printf("Może być tylko jedna definicja funkcji");
+					// return 1;
+					return;
+				}
+		  }
 		  else if (nbra == 0){ // nast. leksem to nie { i jesteśmy poza blokami - to musi być prototyp
-			store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listProto);
+			if(store_add_fun (get_from_fun_stack (), alex_getLN (), inpname, listProto)){
+				printf("Może być tylko jedna definicja prototypu");
+				// return 1;
+				return;
+			}
 			shift_from_fun_stack();
 		  }
 		  else{ // nast. leksem to nie { i jesteśmy wewnątrz bloku - to zapewne wywołanie
@@ -142,17 +151,31 @@ void addCallElem(callNode_t** call, char* element) {
  	}
 }
 
-void store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list){
+int store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list){
+	listNode_t * tempFunctionList = *list;
+	while (tempFunctionList != NULL){
+		if(strcmp(tempFunctionList->name, top)){
+			linesNode_t* lines = malloc(sizeof(*lines));
+			lines->start = line_num;
+			lines->end = line_num;
+			lines->fileName = inpname;
+			addLinesElem(tempFunctionList->linesHead, lines);
+			return 2;
+		}
+		tempFunctionList = tempFunctionList->next;
+	}
 	linesNode_t* lines = malloc(sizeof(*lines));
 	listNode_t* lista = malloc(sizeof(*lista));
 	lines->start=line_num;
 	lines->end=line_num;
+	lines->fileName = inpname;
 	lines->next=NULL;
 	lista->name=top;
-	lista->File = inpname;
+	//lista->File = inpname;
 	lista->linesHead = NULL;
 	addLinesElem(lista->linesHead, lines);
 	addListElem(listDef, lista);
+	return 1;
 }
 //dodaje linie konczaca definicje do listy
 void addEndOfDef(listNode_t ** list, char* top, int line_num) {
