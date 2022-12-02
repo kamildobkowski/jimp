@@ -180,7 +180,7 @@ int store_add_fun(char *top, int line_num, char* inpname, listNode_t ** list){
 //dodaje linie konczaca definicje do listy
 void addEndOfDef(listNode_t ** list, char* top, int line_num) {
 	listNode_t ** tmp = list;
-	while(tmp!=NULL && (*tmp)->name!=top) {
+	while(tmp!=NULL && !strcmp((*tmp)->name,top)) {
 		tmp = (*tmp)->next;
 	}
 	if(tmp==NULL) return;
@@ -191,7 +191,7 @@ void addEndOfDef(listNode_t ** list, char* top, int line_num) {
 void store_add_call(char* top, char* name, listNode_t** lista) {
 	listNode_t **tmp = lista;
 	while(tmp!=NULL) {
-		if((*tmp)->name==name) {
+		if(strcmp((*tmp)->name, name)) {
 			addCallElem(tmp, top);
 		}
 	}
