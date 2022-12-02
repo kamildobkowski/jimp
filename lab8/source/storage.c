@@ -96,3 +96,15 @@ void store_add_call(char* top, char* name, listNode_t** lista) {
 		}
 	}
 }
+
+void freeList(listNode_t** head)
+{
+   listNode_t** tmp;
+   while (head != NULL)
+    {
+       tmp = head;
+       *head = (*head)->next;
+       free(tmp);
+    }
+
+}

@@ -26,5 +26,5 @@ void addListElem(listNode_t** lista, listNode_t* element);
 void addLinesElem(linesNode_t** lines, linesNode_t* element);
 void store_add_call(char* top, char* name, listNode_t** lista);
 void addCallElem(callNode_t** call, char* element);
-
+void freeList(listNode_t** list);
 #endif

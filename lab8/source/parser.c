@@ -90,7 +90,7 @@ void analizatorSkladni (char *inpname)
 	case ERROR:{
 		fprintf (stderr, "\nBUUUUUUUUUUUUUUUUUUUUUU!\n"
 				 "W pliku %s (linia %d) są błędy składni.\n"
-				 "Kończę!\n\n", inpname, alex_getNL ());
+				 "Kończę!\n\n", inpname, alex_getLN ());
 		//free
 		return;
 	  }
