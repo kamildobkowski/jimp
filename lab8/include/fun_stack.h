@@ -2,7 +2,7 @@
 #define _FUN_STACK_H_IS_INCLUDED_
 
 // Struktura przetrzymująca element stosu
-typedef struct e
+typedef struct eStack
 {
     // Nazwa funkcji
     char *name;
@@ -11,7 +11,7 @@ typedef struct e
     // Zagłębienie klamerkowe
     int braLevel;
     // Wskaźnik na następny element
-    struct e *next;
+    struct eStack *next;
 } *Node;
 
 // Funkcje dotyczące struktury Node

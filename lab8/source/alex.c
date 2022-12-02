@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 static int ln = 0;
 static char ident[256];
@@ -16,7 +17,19 @@ void alex_init4file(FILE *in)
 
 int isKeyword(char *indentyfier)
 {
-	return 1;
+	const char *keywords[] = {
+		"auto", "break", "case", "char", "continue", "do", "default", "const", "double", "else", "enum", "extern", "for", "if", "goto", "float", "int", "long", "register", "return", "signed", "static", "sizeof", "short", "struct", "switch", "typedef", "union", "void", "while", "volatile", "unsigned"
+
+	};
+	int i;
+	for (i = 0; i < 32; i++)
+	{
+		if (strcmp(indentyfier, keywords[i]))
+		{
+			return 1;
+		}
+	}
+	return 0;
 }
 
 // Wybiera następny znak z pliku źródłowego i zwraca jeden ze statusów enuma lexem_t
@@ -65,10 +78,33 @@ lexem_t alex_nextLexem(void)
 		else if (c == '/')
 		{
 			/* moze byc komentarz */
+			if (c = fgetc(ci) == '/')
+			{
+				while (c = fgetc(ci) != '\n')
+					;
+				continue;
+			}
+			else if (c == '*')
+			{
+				c = fgetc(ci);
+				char next = fgetc(ci);
+				while (!(c == '*' && next == '/'))
+				{
+					if (c == '\n')
+						ln++;
+					if (next == '\n')
+						ln++;
+					c = next;
+					next = fgetc(ci);
+				}
+				continue;
+			}
 		}
 		if (isdigit(c) || c == '.')
 		{
-			/* liczba */
+			while (c = fgetc(ci) != ' ')
+				;
+			continue;
 		}
 		else
 		{
