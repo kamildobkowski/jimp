@@ -4,6 +4,7 @@ CFLAGS=-I$(IDIR)
 
 ODIR=./out
 LDIR =./lib
+SDIR=./source
 
 LIBS=-lm
 
@@ -16,21 +17,21 @@ OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 _TEST = test.o alex.o
 TEST = $(patsubst %,$(ODIR)/%,$(_TEST))
 
-$(ODIR)/%.o: %.c $(DEPS)
+$(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 
-lib/test.out: $(TEST)
+$(LDIR)/test.out: $(TEST)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
-# lib/a.out: $(OBJ)
-# 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+# $(LDIR)/a.out: $(OBJ)
+#  	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 
 .PHONY: easy-init clean test-easy
 
 easy-init:
-	mkdir -p include lib out
+	mkdir -p lib out
 
 clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
