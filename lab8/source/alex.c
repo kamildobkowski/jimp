@@ -1,5 +1,6 @@
-#include "alex.h"
+#include "../include/alex.h"
 
+#include <stdio.h>
 #include <ctype.h>
 
 static int ln = 0;

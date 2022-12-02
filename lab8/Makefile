@@ -9,13 +9,13 @@ TDIR=./testSourceFile
 
 # LIBS=-lm # Można dodać dla math.c
 
-_DEPS = alex.h
+_DEPS = alex.h fun_stack.h parser.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
-_OBJ = main.o alex.o 
+_OBJ = main.o alex.o fun_stack.o parser.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
-_TEST = test.o alex.o
+_TEST = test.o alex.o fun_stack.o parser.o
 TEST = $(patsubst %,$(ODIR)/%,$(_TEST))
 
 $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
