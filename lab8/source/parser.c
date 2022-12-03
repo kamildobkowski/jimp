@@ -13,9 +13,14 @@
 listNode_t **listDef;
 listNode_t **listProto;
 listNode_t **listCall;
+listFunctions_t *printFunctions;
 
 void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
     FILE *in = fopen(inpname, "r");
+    if (in == NULL) {
+        printf("DUPA DUPA DUPA\n");
+        exit(0);
+    }
 
     int nbra = 0;  // bilans nawiasów klamrowych {}
     int npar = 0;  // bilans nawiasów zwykłych ()
@@ -25,6 +30,7 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
     lexem_t lex;
 
     lex = alex_nextLexem();  // pobierz następny leksem
+
     while (lex != EOFILE) {
         switch (lex) {
             case IDENT: {
@@ -34,11 +40,12 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                 if (nlex ==
                     OPEPAR) {  // nawias otwierający - to zapewne funkcja
                     npar++;
-                    put_on_fun_stack(iname, npar,
-                                     nbra);  // odłóż na stos funkcje i bilans
-                                             // nawiasów stos f. jest niezbędny,
-                                             // aby poprawnie obsłużyć sytuacje
-                                             // typu f1( 5, f2( a ), f3( b ) )
+                    put_on_fun_stack(iname, npar, nbra);
+                    // printf("[%s]", get_from_fun_stack());
+                    //  odłóż na stos funkcje i bilans
+                    //  nawiasów stos f. jest niezbędny,
+                    //  aby poprawnie obsłużyć sytuacje
+                    //  typu f1( 5, f2( a ), f3( b ) )
                 } else {  // nie nawias, czyli nie funkcja
                     lex = nlex;
                     continue;
@@ -49,12 +56,15 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                 break;
             case CLOPAR: {  // zamykający nawias - to może być koniec prototypu,
                             // nagłówka albo wywołania
-                if (top_of_funstack() ==
-                    npar) {  // sprawdzamy, czy liczba nawiasów bilansuje się z
-                             // wierzchołkiem stosu funkcji jeśli tak, to
-                             // właśnie wczytany nawias jest domknięciem nawiasu
-                             // otwartego za identyfikatorem znajdującym się na
-                             // wierzchołku stosu
+
+                if (*get_fun_stack() == NULL) break;
+                if (top_of_funstack() == npar) {
+                    // sprawdzamy, czy liczba nawiasów bilansuje się z
+                    // wierzchołkiem stosu funkcji jeśli tak, to
+                    // właśnie wczytany nawias jest domknięciem nawiasu
+                    // otwartego za identyfikatorem znajdującym się na
+                    // wierzchołku stosu
+                    store_add_pri(printFunctions, get_from_fun_stack());
                     lexem_t nlex = alex_nextLexem();  // bierzemy nast leksem
                     if (nlex == OPEBRA) {  // nast. leksem to klamra a więc mamy
                                            // do czynienia z def. funkcji
@@ -68,23 +78,23 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                                0) {  // nast. leksem to nie { i jesteśmy poza
                                      // blokami - to musi być prototyp
                         if (store_add_fun(get_from_fun_stack(), alex_getLN(),
-                                          inpname, listProto)) {
+                                          inpname, listProto) == 2) {
                             printf("Może być tylko jedna definicja prototypu");
                             // return 1;
                             return;
                         }
-                        shift_from_fun_stack();
+                        pop_from_fun_stack();
                     } else {  // nast. leksem to nie { i jesteśmy wewnątrz bloku
                               // - to zapewne wywołanie
                         store_add_fun(get_from_fun_stack(), alex_getLN(),
                                       inpname, listCall);
-                        Node *tmpStack = get_fun_stack();
+                        Node tmpStack = *get_fun_stack();
                         while (tmpStack != NULL) {
-                            store_add_call(get_from_fun_stack,
-                                           (*tmpStack)->name, listCall);
-                            tmpStack = (*tmpStack)->next;
+                            store_add_call(get_from_fun_stack(), tmpStack->name,
+                                           listCall);
+                            tmpStack = tmpStack->next;
                         }
-                        shift_from_fun_stack();
+                        pop_from_fun_stack();
                     }
                 }
                 npar--;
@@ -93,8 +103,11 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                 nbra++;
                 break;
             case CLOBRA: {
-                shift_from_fun_stack();
                 nbra--;
+                if (*get_fun_stack() == NULL) break;
+                if ((*get_fun_stack())->braLevel == nbra) {
+                    pop_from_fun_stack();
+                }
                 break;
             }
             case ERROR: {
@@ -111,6 +124,7 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
         }
         lex = alex_nextLexem();
     }
+    fclose(in);
 }
 
 // zwraca liste definicji
@@ -119,3 +133,16 @@ listNode_t **getListDef() { return listDef; }
 listNode_t **getListCall() { return listCall; }
 // zwrata liste prototypow
 listNode_t **getListProto() { return listProto; }
+// zwrata liste funkcji
+listFunctions_t *getListFun() { return printFunctions; }
+
+void initAllStorage() {
+    listDef = malloc(sizeof(*listDef));
+    *listDef = NULL;
+    listProto = malloc(sizeof(*listProto));
+    *listProto = NULL;
+    listCall = malloc(sizeof(*listCall));
+    *listCall = NULL;
+    printFunctions = malloc(sizeof(*printFunctions));
+    *printFunctions = NULL;
+}

@@ -30,4 +30,5 @@ void put_on_fun_stack(
 char *get_from_fun_stack(
     void);  // usuwa z wierzchołka parę (funame,par_level), zwraca zdjętą funame
 Node *get_fun_stack(void);
+void pop_from_fun_stack();
 #endif

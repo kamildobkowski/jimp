@@ -17,10 +17,16 @@ int main(int argc, char **argv) {
     // sprawdzenie działania parser.c
 
     // Wczytanie plików z argv
+    initFunctionStack();
+    initAllStorage();
     for (i = 1; i < argc; i++) {
         analizatorSkladni(argv[i]);
+        printFiles();
     }
+
     freeList(getListDef());
     freeList(getListCall());
     freeList(getListProto());
+    freeFunctionList(getListFun());
+    freeElements();
 }
