@@ -44,7 +44,6 @@ lexem_t alex_nextLexem(void) {
         //  Ignorujemy wszystkie spacje w pliku
         if (c == '\n') {
             ln++;
-            printf("%d\n", ln);
             continue;
         } else if (isspace(c))
             continue;
@@ -83,6 +82,7 @@ lexem_t alex_nextLexem(void) {
             if (c = fgetc(ci) == '/') {
                 while (c = fgetc(ci) != '\n')
                     ;
+                ln++;
                 continue;
             } else if (c == '*') {
                 c = fgetc(ci);
