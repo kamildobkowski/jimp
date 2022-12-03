@@ -1,17 +1,16 @@
 #include "../include/fun_stack.h"
 
+#include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 // Funckje struktury Stosu
 
 Node *funStack;
 
 void initFunctionStack() {
-    Node *funStack = malloc(sizeof(*funStack));
+    funStack = malloc(sizeof(*funStack));
     *funStack = NULL;
 }
-
-// zwraca par_level - "zagłębienie nawiasowe" przechowywane na szczycie
-int top_of_funstack(void) { return (*funStack)->parLevel; }
 
 // odkłada na stos parę (funame, par_level, bra_level)
 void put_on_fun_stack(char *funame, int par_level, int bra_level) {
@@ -21,9 +20,24 @@ void put_on_fun_stack(char *funame, int par_level, int bra_level) {
 }
 
 // Pobiera ze stosu element zarazem go usuwając
-char *get_from_fun_stack(void) { return (*funStack)->name; }
+char *get_from_fun_stack(void) {
+    if (funStack == NULL) {
+        return "";
+    } else {
+        return (*funStack)->name;
+    }
+}
 
-void shift_from_fun_stack() {
+// zwraca par_level - "zagłębienie nawiasowe" przechowywane na szczycie
+int top_of_funstack(void) {
+    if (funStack == NULL) {
+        return -1;
+    } else {
+        return (*funStack)->parLevel;
+    }
+}
+
+void pop_from_fun_stack() {
     Node temp = (*funStack);
     (*funStack) = (*funStack)->next;
     temp->next = NULL;
@@ -34,8 +48,13 @@ void shift_from_fun_stack() {
 
 // Inicjacja elementu stosu
 Node initNode(char *funame, int par_level, int bra_level) {
-    Node e = malloc(sizeof(*e));
-    e->name = funame;
+    Node e = (Node)malloc(sizeof(struct eStack));
+    if (e == NULL) {
+        printf("Malloc filed [fun_stac.c on initNode()]\n");
+        exit(1);
+    }
+    e->name = malloc(sizeof(*e->name) * strlen(funame) + 1);
+    strcpy(e->name, funame);
     e->parLevel = par_level;
     e->braLevel = bra_level;
     e->next = NULL;
@@ -45,4 +64,12 @@ Node initNode(char *funame, int par_level, int bra_level) {
 // Zwraca Stos funkcji
 Node *get_fun_stack() { return funStack; }
 
-void freeElements() { free(funStack); }
+void freeElements() {
+    Node temp;
+    while ((temp = *funStack) != NULL) {
+        *funStack = (*funStack)->next;
+        // free(temp->name);
+        free(temp);
+    }
+    free(funStack);
+}

@@ -2,6 +2,7 @@
 
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 static int ln = 0;
@@ -16,17 +17,17 @@ void alex_init4file(FILE *in) {
 
 int isKeyword(char *indentyfier) {
     const char *keywords[] = {
-        "auto",     "break",   "case",    "char",   "continue", "do",
-        "default",  "const",   "double",  "else",   "enum",     "extern",
-        "for",      "if",      "goto",    "float",  "int",      "long",
-        "register", "return",  "signed",  "static", "sizeof",   "short",
-        "struct",   "switch",  "typedef", "union",  "void",     "while",
-        "volatile", "unsigned"
+        "auto",     "break",    "case",    "char",   "continue", "do",
+        "default",  "const",    "double",  "else",   "enum",     "extern",
+        "for",      "if",       "goto",    "float",  "int",      "long",
+        "register", "return",   "signed",  "static", "sizeof",   "short",
+        "struct",   "switch",   "typedef", "union",  "void",     "while",
+        "volatile", "unsigned", "include"
 
     };
     int i;
-    for (i = 0; i < 32; i++) {
-        if (strcmp(indentyfier, keywords[i])) {
+    for (i = 0; i < 33; i++) {
+        if (strcmp(indentyfier, keywords[i]) == 0) {
             return 1;
         }
     }
@@ -37,14 +38,18 @@ int isKeyword(char *indentyfier) {
 // lexem_t
 lexem_t alex_nextLexem(void) {
     int c;
+
     // Pętla kończąca zadanie kiedy przejdzie przez wszystkie znaki w pliku
     while ((c = fgetc(ci)) != EOF) {
-        // Ignorujemy wszystkie spacje w pliku
+        //  Ignorujemy wszystkie spacje w pliku
         if (isspace(c))
             continue;
-        else if (c == '\n')  // Jeśli znajdziemy znak nowej lini zwiększamy
-                             // naszą zmienną
+        else if (c == '\n') {  // Jeśli znajdziemy znak nowej lini zwiększamy
+                               // naszą zmienną
             ln++;
+            continue;
+        }
+
         // START: Definicji działań zwracających wartości enuma lexem_t
         else if (c == '(')
             return OPEPAR;
@@ -59,15 +64,17 @@ lexem_t alex_nextLexem(void) {
         else if (isalpha(c)) {
             int i = 1;
             ident[0] = c;
-            while (isalnum(c = fgetc(ci))) ident[i++] = c;
+            while (isalnum(c = fgetc(ci)) || c == '_') ident[i++] = c;
             ident[i] = '\0';
+            fseek(ci, -1L, SEEK_CUR);
             return isKeyword(ident) ? OTHER : IDENT;
         } else if (c == '"') {
             /* Uwaga: tu trzeba jeszcze poprawic obsluge nowej linii w trakcie
                napisu i \\ w napisie
             */
             int cp = c;
-            while ((c = fgetc(ci)) != EOF && c != '"' && cp == '\\') {
+            while ((c = fgetc(ci)) != EOF && c != '"') {
+                if (cp == '\\' && c == 'n') ln++;
                 cp = c;
             }
             return c == EOF ? EOFILE : OTHER;
@@ -90,8 +97,6 @@ lexem_t alex_nextLexem(void) {
             }
         }
         if (isdigit(c) || c == '.') {
-            while (c = fgetc(ci) != ' ')
-                ;
             continue;
         } else {
             return OTHER;
