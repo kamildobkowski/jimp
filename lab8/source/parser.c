@@ -6,6 +6,7 @@
 
 #include "../include/alex.h"       // analizator leksykalny
 #include "../include/fun_stack.h"  // stos funkcji
+#include "../include/printAlex.h"
 #include "../include/storage.h"
 
 #define MAXINDENTLENGHT 256  // maks długość identyfikatora
@@ -19,12 +20,11 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
     FILE *in = fopen(inpname, "r");
     if (in == NULL) {
         printf("DUPA DUPA DUPA\n");
-        exit(0);
+        return;
     }
 
-    int nbra = 0;  // bilans nawiasów klamrowych {}
-    int npar = 0;  // bilans nawiasów zwykłych ()
-
+    int nbra = 0;        // bilans nawiasów klamrowych {}
+    int npar = 0;        // bilans nawiasów zwykłych ()
     alex_init4file(in);  // ustaw analizator leksykalny, aby czytał in
 
     lexem_t lex;
@@ -41,7 +41,6 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                     OPEPAR) {  // nawias otwierający - to zapewne funkcja
                     npar++;
                     put_on_fun_stack(iname, npar, nbra);
-                    // printf("[%s]", get_from_fun_stack());
                     //  odłóż na stos funkcje i bilans
                     //  nawiasów stos f. jest niezbędny,
                     //  aby poprawnie obsłużyć sytuacje
@@ -65,30 +64,42 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                     // otwartego za identyfikatorem znajdującym się na
                     // wierzchołku stosu
                     store_add_pri(printFunctions, get_from_fun_stack());
+                    // ^ Nie powoduje blędów utraty pamięci
                     lexem_t nlex = alex_nextLexem();  // bierzemy nast leksem
-                    if (nlex == OPEBRA) {  // nast. leksem to klamra a więc mamy
-                                           // do czynienia z def. funkcji
-                        if (store_add_fun(get_from_fun_stack(), alex_getLN(),
-                                          inpname, listDef) == 2) {
-                            printf("Może być tylko jedna definicja funkcji");
-                            // return 1;
-                            return;
-                        }
+
+                    // nast. leksem to klamra a więc mamy do czynienia z def.
+                    // funkcji
+                    if (nlex == OPEBRA) {
+                        store_add_fun(get_from_fun_stack(), alex_getLN(),
+                                      inpname, listDef);
+                        // if (store_add_fun(get_from_fun_stack(), alex_getLN(),
+                        //                   inpname, listDef) == 2) {
+                        //     // ^ Poowoduje blędy utraty pamięci
+                        //     printf("Może być tylko jedna definicja funkcji");
+                        //     // return 1;
+                        //     freeExit(in);
+                        //     return;
+                        // }
                     } else if (nbra ==
                                0) {  // nast. leksem to nie { i jesteśmy poza
                                      // blokami - to musi być prototyp
-                        if (store_add_fun(get_from_fun_stack(), alex_getLN(),
-                                          inpname, listProto) == 2) {
-                            printf("Może być tylko jedna definicja prototypu");
-                            // return 1;
-                            return;
-                        }
+                        store_add_fun(get_from_fun_stack(), alex_getLN(),
+                                      inpname, listProto);
+                        // if (store_add_fun(get_from_fun_stack(), alex_getLN(),
+                        //                   inpname, listProto) == 2) {
+                        //     printf("Może być tylko jedna definicja
+                        //     prototypu");
+                        //     // return 1;
+                        //     freeExit(in);
+                        //     return;
+                        // }
                         pop_from_fun_stack();
                     } else {  // nast. leksem to nie { i jesteśmy wewnątrz bloku
                               // - to zapewne wywołanie
                         store_add_fun(get_from_fun_stack(), alex_getLN(),
                                       inpname, listCall);
                         Node tmpStack = *get_fun_stack();
+                        tmpStack = tmpStack->next;
                         while (tmpStack != NULL) {
                             store_add_call(get_from_fun_stack(), tmpStack->name,
                                            listCall);
@@ -117,6 +128,7 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                         "Kończę!\n\n",
                         inpname, alex_getLN());
                 // free
+                freeExit(in);
                 return;
             } break;
             default:

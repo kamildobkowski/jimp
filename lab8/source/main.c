@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../include/alex.h"
 #include "../include/fun_stack.h"
@@ -7,7 +8,7 @@
 #include "../include/printAlex.h"
 #include "../include/storage.h"
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     int i = 0;
     // Sprawdzenie działania fun_stack.c
 
@@ -17,16 +18,18 @@ int main(int argc, char **argv) {
     // sprawdzenie działania parser.c
 
     // Wczytanie plików z argv
-    initFunctionStack();
+
     initAllStorage();
+
     for (i = 1; i < argc; i++) {
+        initFunctionStack();
         analizatorSkladni(argv[i]);
-        printFiles();
+        freeElements();
     }
 
-    freeList(getListDef());
+    printFiles();
     freeList(getListCall());
     freeList(getListProto());
+    freeList(getListDef());
     freeFunctionList(getListFun());
-    freeElements();
 }

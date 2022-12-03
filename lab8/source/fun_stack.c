@@ -48,12 +48,12 @@ void pop_from_fun_stack() {
 
 // Inicjacja elementu stosu
 Node initNode(char *funame, int par_level, int bra_level) {
-    Node e = (Node)malloc(sizeof(struct eStack));
+    Node e = (Node)malloc(sizeof(*e));
     if (e == NULL) {
         printf("Malloc filed [fun_stac.c on initNode()]\n");
         exit(1);
     }
-    e->name = malloc(sizeof(*e->name) * strlen(funame) + 1);
+    e->name = malloc(sizeof(*e->name) * (strlen(funame) + 1));
     strcpy(e->name, funame);
     e->parLevel = par_level;
     e->braLevel = bra_level;
@@ -68,7 +68,7 @@ void freeElements() {
     Node temp;
     while ((temp = *funStack) != NULL) {
         *funStack = (*funStack)->next;
-        // free(temp->name);
+        free(temp->name);
         free(temp);
     }
     free(funStack);
