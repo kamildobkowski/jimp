@@ -42,13 +42,13 @@ lexem_t alex_nextLexem(void) {
     // Pętla kończąca zadanie kiedy przejdzie przez wszystkie znaki w pliku
     while ((c = fgetc(ci)) != EOF) {
         //  Ignorujemy wszystkie spacje w pliku
-        if (isspace(c))
-            continue;
-        else if (c == '\n') {  // Jeśli znajdziemy znak nowej lini zwiększamy
-                               // naszą zmienną
+        if (c == '\n') {
             ln++;
+            printf("%d\n", ln);
             continue;
-        }
+        } else if (isspace(c))
+            continue;
+        // Jeśli znajdziemy znak nowej lini zwiększamy naszą zmienną
 
         // START: Definicji działań zwracających wartości enuma lexem_t
         else if (c == '(')

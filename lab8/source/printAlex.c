@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "../include/fun_stack.h"
 #include "../include/parser.h"
@@ -13,13 +14,9 @@ void printFiles() {
     while (tempFunctionList != NULL) {
         char* functionName = tempFunctionList->name;
         printf("Funkcja [%s]:\n", functionName);
-        printf("\t");
         printThreeType(functionName, "Prototypy", *getListProto());
-        printf("\t");
         printThreeType(functionName, "Definicje", *getListDef());
-        printf("\t");
         printThreeType(functionName, "Uzycia   ", *getListCall());
-        printf("\t");
         printSomeCall(functionName);
         printf("\n");
         tempFunctionList = tempFunctionList->next;
@@ -27,10 +24,9 @@ void printFiles() {
 }
 
 void printThreeType(char* name, char* message, listNode_t* temp) {
-    printf("%s:\n", message);
+    printf("\t%s:\n", message);
     while (temp != NULL) {
-        printf("[%s]", "DUPA");
-        if (temp->name == name) {
+        if (strcmp(temp->name, name) == 0) {
             printFileLocalisation(temp->linesHead);
             return;
         }
@@ -39,10 +35,10 @@ void printThreeType(char* name, char* message, listNode_t* temp) {
 }
 
 void printSomeCall(char* name) {
-    printf("Wywołuje:\n");
+    printf("\tWywoluje:\n");
     listNode_t* temp = *getListCall();
     while (temp != NULL) {
-        if (temp->name == name) {
+        if (strcmp(temp->name, name) == 0) {
             printInFunctionCall(temp->callHead);
             return;
         }
@@ -53,8 +49,8 @@ void printSomeCall(char* name) {
 void printFileLocalisation(linesNode_t** linesInFile) {
     linesNode_t* temp = *linesInFile;
     while (temp != NULL) {
-        printf("plik: [%s] w liniach [%d, %d]\n", temp->fileName, temp->start,
-               temp->end);
+        printf("\t\tplik: [%s] w liniach [%d, %d]\n", temp->fileName,
+               temp->start, temp->end);
         temp = temp->next;
     }
 }
@@ -62,7 +58,17 @@ void printFileLocalisation(linesNode_t** linesInFile) {
 void printInFunctionCall(callNode_t** callInFunction) {
     callNode_t* temp = *callInFunction;
     while (temp != NULL) {
-        printf("plik: [%s] - [%d razy]\n", temp->name, temp->ile);
+        printf("\t\t[%s] - [%d razy]\n", temp->name, temp->ile);
         temp = temp->next;
     }
+}
+
+void freeExit(FILE* in) {
+    freeList(getListCall());
+    freeList(getListProto());
+    freeList(getListDef());
+    freeFunctionList(getListFun());
+    freeElements();
+    fclose(in);
+    exit(1);
 }

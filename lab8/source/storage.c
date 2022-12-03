@@ -1,68 +1,16 @@
 #include "../include/storage.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "../include/parser.h"
 
-void addListElem(listNode_t** lista, listNode_t* element) {
-    if (lista == NULL) {
-        *lista = element;
-        (*lista)->next = NULL;
-    } else {
-        listNode_t* tmp = *lista;
-        while (tmp != NULL) {
-            tmp = tmp->next;
-        }
-        tmp = element;
-        tmp->next = NULL;
-        free(tmp);
-    }
-}
-
-void addLinesElem(linesNode_t** lines, linesNode_t* element) {
-    if (lines == NULL) {
-        *lines = element;
-        (*lines)->next = NULL;
-    } else {
-        linesNode_t* tmp = *lines;
-        while (tmp != NULL) {
-            tmp = tmp->next;
-        }
-        tmp = element;
-        tmp->next = NULL;
-        free(tmp);
-    }
-}
-
-void addCallElem(callNode_t** call, char* element) {
-    if (call == NULL) {
-        call = malloc(sizeof(*call));
-        *call = malloc(sizeof(**call));
-        (*call)->name = malloc(sizeof(*(*call)->name) * strlen(element) + 1);
-        strcpy((*call)->name, element);
-        (*call)->ile = 1;
-        (*call)->next = NULL;
-    } else {
-        callNode_t* tmp = *call;
-        while (tmp != NULL) {
-            if (tmp->name == element) {
-                tmp->ile++;
-                return;
-            }
-            tmp = tmp->next;
-        }
-        (*call)->name = malloc(sizeof(*(*call)->name) * strlen(element) + 1);
-        strcpy((*call)->name, element);
-        tmp->next = NULL;
-        free(tmp);
-    }
-}
-
 // Funkcja inicjująca element
 listFunctions_t initPriElement(char* name) {
     listFunctions_t element = malloc(sizeof(*element));
-    element->name = name;
+    element->name = malloc(sizeof(*element->name) * strlen(name) + 1);
+    strcpy(element->name, name);
     return element;
 }
 
@@ -80,37 +28,65 @@ void store_add_pri(listFunctions_t* printFunctions, char* name) {
     *printFunctions = tempFunctions;
 }
 
-int store_add_fun(char* top, int line_num, char* inpname, listNode_t** list) {
-    listNode_t* tempFunctionList = *list;
-    while (tempFunctionList != NULL) {
-        if (strcmp(tempFunctionList->name, top) == 0) {
-            linesNode_t* lines = malloc(sizeof(*lines));
-            lines->start = line_num;
-            lines->end = line_num;
-            lines->fileName =
-                malloc(sizeof(*lines->fileName) * strlen(inpname) + 1);
-            strcpy(lines->fileName, inpname);
-            addLinesElem(tempFunctionList->linesHead, lines);
-            return 2;
-        }
-        tempFunctionList = tempFunctionList->next;
+void addListElem(listNode_t** lista, listNode_t* element) {
+    element->next = NULL;
+    if (lista == NULL) {
+        lista = malloc(sizeof(*lista));
+        *lista = element;
+    } else {
+        element->next = *lista;
+        *lista = element;
     }
+}
+
+void addLinesElem(linesNode_t** lines, linesNode_t* element) {
+    element->next = NULL;
+    if (lines == NULL) {
+        lines == malloc(sizeof(*lines));
+        *lines = element;
+    } else {
+        element->next = *lines;
+        *lines = element;
+    }
+}
+
+linesNode_t* initLinesNode(char* inpname, int line_num) {
     linesNode_t* lines = malloc(sizeof(*lines));
-    listNode_t* lista = malloc(sizeof(*lista));
     lines->start = line_num;
     lines->end = line_num;
     lines->fileName = malloc(sizeof(*lines->fileName) * strlen(inpname) + 1);
     strcpy(lines->fileName, inpname);
     lines->next = NULL;
+    return lines;
+}
+
+listNode_t* initListNode(char* top, char* inpname, int line_num) {
+    listNode_t* lista = malloc(sizeof(*lista));
     lista->name = malloc(sizeof(*lista->name) * strlen(top) + 1);
     strcpy(lista->name, top);
-    // lista->File = inpname;
     lista->linesHead = malloc(sizeof(*lista->linesHead));
     *(lista->linesHead) = NULL;
-    addLinesElem(lista->linesHead, lines);
-    addListElem(getListDef(), lista);
+    lista->callHead = malloc(sizeof(*lista->callHead));
+    *(lista->callHead) = NULL;
+    addLinesElem(lista->linesHead, initLinesNode(inpname, line_num));
+    return lista;
+}
+
+int store_add_fun(char* top, int line_num, char* inpname, listNode_t** list) {
+    listNode_t* tempFunctionList = *list;
+    while (tempFunctionList != NULL) {
+        if (strcmp(tempFunctionList->name, top) == 0) {
+            addLinesElem(tempFunctionList->linesHead,
+                         initLinesNode(inpname, line_num));
+            return 2;
+        }
+        tempFunctionList = tempFunctionList->next;
+    }
+    listNode_t* lista = initListNode(top, inpname, line_num);
+    addListElem(list, lista);
     return 1;
 }
+
 // dodaje linie konczaca definicje do listy
 void addEndOfDef(listNode_t** list, char* top, int line_num) {
     listNode_t* tmp = *list;
@@ -119,6 +95,35 @@ void addEndOfDef(listNode_t** list, char* top, int line_num) {
     }
     if (tmp == NULL) return;
     (*tmp->linesHead)->end = line_num;
+    // free(tmp);
+}
+
+callNode_t* initCallNode(char* name) {
+    callNode_t* tmp = malloc(sizeof(*tmp));
+    tmp->name = malloc(sizeof(tmp->name) * strlen(name) + 1);
+    strcpy(tmp->name, name);
+    tmp->next = NULL;
+    return tmp;
+}
+
+void addCallElem(callNode_t** call, char* name) {
+    callNode_t* tmp = *call;
+    if (tmp == NULL) {
+        tmp = initCallNode(name);
+        tmp->next = *call;
+        *call = tmp;
+    } else {
+        while (tmp != NULL) {
+            if (tmp->name == name) {
+                tmp->ile++;
+                return;
+            }
+            tmp = tmp->next;
+        }
+        tmp = initCallNode(name);
+        tmp->next = *call;
+        *call = tmp;
+    }
     // free(tmp);
 }
 

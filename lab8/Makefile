@@ -9,6 +9,8 @@ TDIR=./testSourceFile
 
 # LIBS=-lm # Można dodać dla math.c
 
+LIBS=-ggdb
+
 _DEPS = alex.h fun_stack.h parser.h printAlex.h storage.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
 
@@ -38,10 +40,6 @@ clean:
 	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
 
 test-easy:
-	for FILE in $(TDIR)/*.c ; do \
-		$(LDIR)/test.out $$FILE ; \
-	done
-	for FILE in $(TDIR)/*.h ; do \
-		$(LDIR)/test.out $$FILE ; \
-	done
+	./$(TDIR)/tests.sh $(TDIR)
+	
 

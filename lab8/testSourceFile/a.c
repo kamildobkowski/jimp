@@ -45,4 +45,12 @@ Node initNode(char *funame, int par_level, int bra_level) {
 // Zwraca Stos funkcji
 Node *get_fun_stack() { return funStack; }
 
-void freeElements() { free(funStack); }
+void freeElements() {
+    Node elm;
+    while ((elm = *funStack) != NULL) {
+        *funStack = (*funStack)->next;
+        free(elm->name);
+        free(elm);
+    }
+    free(funStack);
+}
