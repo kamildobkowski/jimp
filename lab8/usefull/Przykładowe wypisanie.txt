@@ -1,35 +1,35 @@
-   Funkcja fa: 
-      Prototyp:
-        plik p.c od linia 1 do linia 1
-      Definicja:
-        plik fa.c od linia 1 do linia 3
-      Użycie:
-        plik p.c od linia 6 do linia 6
-      Wywołuje:
-        brak
+	 Funkcja fa: 
+			Prototyp:
+				plik p.c od linia 1 do linia 1
+			Definicja:
+				plik fa.c od linia 1 do linia 3
+			Użycie:
+				plik p.c od linia 6 do linia 6
+			Wywołuje:
+				brak
 
 
-   Funkcja fb:
-      Prototyp:
-        plik p.c od linia 2 do linia 2
-      Definicja:
-        plik p.c od linia 13 do linia 16
-      Użycie:
-        plik p.c od linia 7 do linia 7
-        plik p.c od linia 9 do linia 9
-      Wywołuje:
-        fc
-        fa
+	 Funkcja fb:
+			Prototyp:
+				plik p.c od linia 2 do linia 2
+			Definicja:
+				plik p.c od linia 13 do linia 16
+			Użycie:
+				plik p.c od linia 7 do linia 7
+				plik p.c od linia 9 do linia 9
+			Wywołuje:
+				fc
+				fa
 
-   Funkcja main:
-      Prototyp:
-        brak
-      Definicja:
-        plik p.c od linia 4 do linia 11
-      Użycie:
-        brak
-      Wywołuje:
-        printf (4 razy)
-        fa
-        fb (2 razy)
-        fc 
+	 Funkcja main:
+			Prototyp:
+				brak
+			Definicja:
+				plik p.c od linia 4 do linia 11
+			Użycie:
+				brak
+			Wywołuje:
+				printf (4 razy)
+				fa
+				fb (2 razy)
+				fc 

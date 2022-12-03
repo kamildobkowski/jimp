@@ -22,11 +22,11 @@ $(ODIR)/%.o: $(SDIR)/%.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 
-$(LDIR)/test.out: $(TEST)
-	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+# $(LDIR)/test.out: $(TEST)
+# 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
-# $(LDIR)/a.out: $(OBJ)
-#  	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
+$(LDIR)/a.out: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 
 .PHONY: easy-init clean test-easy
