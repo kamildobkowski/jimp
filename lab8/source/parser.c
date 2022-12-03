@@ -55,7 +55,6 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                 break;
             case CLOPAR: {  // zamykający nawias - to może być koniec prototypu,
                             // nagłówka albo wywołania
-
                 if (*get_fun_stack() == NULL) break;
                 if (top_of_funstack() == npar) {
                     // sprawdzamy, czy liczba nawiasów bilansuje się z
@@ -70,22 +69,33 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                     // nast. leksem to klamra a więc mamy do czynienia z def.
                     // funkcji
                     if (nlex == OPEBRA) {
+                        nbra++;
+                        if (nbra != 1) {
+                            lex = alex_nextLexem();
+                            continue;
+                        }
+                    }
+                    if (nlex == OPEBRA && nbra == 1) {
                         store_add_fun(get_from_fun_stack(), alex_getLN(),
                                       inpname, listDef);
-                        // if (store_add_fun(get_from_fun_stack(), alex_getLN(),
+
+                        // if (store_add_fun(get_from_fun_stack(),
+                        // alex_getLN(),
                         //                   inpname, listDef) == 2) {
                         //     // ^ Poowoduje blędy utraty pamięci
-                        //     printf("Może być tylko jedna definicja funkcji");
+                        //     printf("Może być tylko jedna definicja
+                        //     funkcji");
                         //     // return 1;
                         //     freeExit(in);
                         //     return;
                         // }
-                    } else if (nbra ==
-                               0) {  // nast. leksem to nie { i jesteśmy poza
-                                     // blokami - to musi być prototyp
+                    } else if (nbra == 0) {
+                        // nast. leksem to nie { i jesteśmy poza
+                        // blokami - to musi być prototyp
                         store_add_fun(get_from_fun_stack(), alex_getLN(),
                                       inpname, listProto);
-                        // if (store_add_fun(get_from_fun_stack(), alex_getLN(),
+                        // if (store_add_fun(get_from_fun_stack(),
+                        // alex_getLN(),
                         //                   inpname, listProto) == 2) {
                         //     printf("Może być tylko jedna definicja
                         //     prototypu");
@@ -94,10 +104,15 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                         //     return;
                         // }
                         pop_from_fun_stack();
-                    } else {  // nast. leksem to nie { i jesteśmy wewnątrz bloku
+                    } else {  // nast. leksem to nie { i jesteśmy wewnątrz
+                              // bloku
                               // - to zapewne wywołanie
                         store_add_fun(get_from_fun_stack(), alex_getLN(),
                                       inpname, listCall);
+                        // printf("[%s, %d, %d, %d]\n", get_from_fun_stack(),
+                        // npar,
+                        //        nbra, alex_getLN());
+                        // printMainStack();
                         Node tmpStack = *get_fun_stack();
                         tmpStack = tmpStack->next;
                         while (tmpStack != NULL) {
@@ -106,6 +121,11 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                             tmpStack = tmpStack->next;
                         }
                         pop_from_fun_stack();
+                    }
+
+                    if (nlex == CLOPAR) {
+                        npar--;
+                        continue;
                     }
                 }
                 npar--;

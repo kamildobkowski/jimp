@@ -72,3 +72,13 @@ void freeExit(FILE* in) {
     fclose(in);
     exit(1);
 }
+
+void printMainStack() {
+    Node temp = *get_fun_stack();
+    printf("[Start]");
+    while (temp != NULL) {
+        printf("-> [%s]", temp->name);
+        temp = temp->next;
+    }
+    printf("\n");
+}

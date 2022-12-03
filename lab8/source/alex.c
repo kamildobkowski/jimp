@@ -5,13 +5,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int ln = 0;
+static int ln;
 static char ident[256];
 static FILE *ci = NULL;
 
 // zeruje zmienne dla nowego pliku zmienne dla pliku
 void alex_init4file(FILE *in) {
-    ln = 0;
+    ln = 1;
     ci = in;
 }
 

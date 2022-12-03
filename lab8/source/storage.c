@@ -108,22 +108,17 @@ callNode_t* initCallNode(char* name) {
 
 void addCallElem(callNode_t** call, char* name) {
     callNode_t* tmp = *call;
-    if (tmp == NULL) {
-        tmp = initCallNode(name);
-        tmp->next = *call;
-        *call = tmp;
-    } else {
-        while (tmp != NULL) {
-            if (tmp->name == name) {
-                tmp->ile++;
-                return;
-            }
-            tmp = tmp->next;
+    while (tmp != NULL) {
+        if (tmp->name == name) {
+            tmp->ile++;
+            return;
         }
-        tmp = initCallNode(name);
-        tmp->next = *call;
-        *call = tmp;
+        tmp = tmp->next;
     }
+    tmp = initCallNode(name);
+    tmp->ile = 1;
+    tmp->next = *call;
+    *call = tmp;
     // free(tmp);
 }
 
@@ -132,6 +127,7 @@ void store_add_call(char* top, char* name, listNode_t** lista) {
     while (tmp != NULL) {
         if (strcmp(tmp->name, name) == 0) {
             addCallElem(tmp->callHead, top);
+            return;
         }
         tmp = tmp->next;
     }

@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     initAllStorage();
 
     for (i = 1; i < argc; i++) {
-        initFunctionStack();
+        initFunctionStack(i);
         analizatorSkladni(argv[i]);
         freeElements();
     }
