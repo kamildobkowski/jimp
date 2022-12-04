@@ -15,6 +15,7 @@ listNode_t **listDef;
 listNode_t **listProto;
 listNode_t **listCall;
 listFunctions_t *printFunctions;
+int flag = 0;
 
 void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
     FILE *in = fopen(inpname, "r");
@@ -41,20 +42,28 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                     OPEPAR) {  // nawias otwierający - to zapewne funkcja
                     npar++;
                     put_on_fun_stack(iname, npar, nbra);
+                    store_add_pri(printFunctions, get_from_fun_stack());
+                    flag++;
                     //  odłóż na stos funkcje i bilans
                     //  nawiasów stos f. jest niezbędny,
                     //  aby poprawnie obsłużyć sytuacje
                     //  typu f1( 5, f2( a ), f3( b ) )
                 } else {  // nie nawias, czyli nie funkcja
                     lex = nlex;
+
                     continue;
                 }
             } break;
             case OPEPAR:
                 npar++;
+                printf("[%d %d]\n", npar, alex_getLN());
                 break;
             case CLOPAR: {  // zamykający nawias - to może być koniec prototypu,
                             // nagłówka albo wywołania
+                if (flag == 0) {
+                    break;
+                }
+                flag--;
                 if (*get_fun_stack() == NULL) break;
                 if (top_of_funstack() == npar) {
                     // sprawdzamy, czy liczba nawiasów bilansuje się z
@@ -62,7 +71,6 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                     // właśnie wczytany nawias jest domknięciem nawiasu
                     // otwartego za identyfikatorem znajdującym się na
                     // wierzchołku stosu
-                    store_add_pri(printFunctions, get_from_fun_stack());
                     // ^ Nie powoduje blędów utraty pamięci
                     lexem_t nlex = alex_nextLexem();  // bierzemy nast leksem
 
@@ -107,6 +115,7 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                     } else {  // nast. leksem to nie { i jesteśmy wewnątrz
                               // bloku
                               // - to zapewne wywołanie
+
                         store_add_fun(get_from_fun_stack(), alex_getLN(),
                                       inpname, listCall);
                         // printf("[%s, %d, %d, %d]\n", get_from_fun_stack(),
@@ -117,7 +126,7 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                         tmpStack = tmpStack->next;
                         while (tmpStack != NULL) {
                             store_add_call(get_from_fun_stack(), tmpStack->name,
-                                           listCall);
+                                           printFunctions);
                             tmpStack = tmpStack->next;
                         }
                         pop_from_fun_stack();
@@ -137,6 +146,7 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                 nbra--;
                 if (*get_fun_stack() == NULL) break;
                 if ((*get_fun_stack())->braLevel == nbra) {
+                    addEndOfDef(listDef, get_from_fun_stack(), alex_getLN());
                     pop_from_fun_stack();
                 }
                 break;

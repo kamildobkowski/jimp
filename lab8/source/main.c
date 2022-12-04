@@ -21,12 +21,12 @@ int main(int argc, char** argv) {
 
     initAllStorage();
 
+    initFunctionStack();
     for (i = 1; i < argc; i++) {
-        initFunctionStack(i);
         analizatorSkladni(argv[i]);
-        freeElements();
     }
 
+    freeElements();
     printFiles();
     freeList(getListCall());
     freeList(getListProto());

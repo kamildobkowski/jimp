@@ -11,6 +11,8 @@ listFunctions_t initPriElement(char* name) {
     listFunctions_t element = malloc(sizeof(*element));
     element->name = malloc(sizeof(*element->name) * strlen(name) + 1);
     strcpy(element->name, name);
+    element->callHead = malloc(sizeof(*element->callHead));
+    *(element->callHead) = NULL;
     return element;
 }
 
@@ -66,8 +68,6 @@ listNode_t* initListNode(char* top, char* inpname, int line_num) {
     strcpy(lista->name, top);
     lista->linesHead = malloc(sizeof(*lista->linesHead));
     *(lista->linesHead) = NULL;
-    lista->callHead = malloc(sizeof(*lista->callHead));
-    *(lista->callHead) = NULL;
     addLinesElem(lista->linesHead, initLinesNode(inpname, line_num));
     return lista;
 }
@@ -95,7 +95,6 @@ void addEndOfDef(listNode_t** list, char* top, int line_num) {
     }
     if (tmp == NULL) return;
     (*tmp->linesHead)->end = line_num;
-    // free(tmp);
 }
 
 callNode_t* initCallNode(char* name) {
@@ -109,7 +108,7 @@ callNode_t* initCallNode(char* name) {
 void addCallElem(callNode_t** call, char* name) {
     callNode_t* tmp = *call;
     while (tmp != NULL) {
-        if (tmp->name == name) {
+        if (strcmp(tmp->name, name) == 0) {
             tmp->ile++;
             return;
         }
@@ -119,11 +118,10 @@ void addCallElem(callNode_t** call, char* name) {
     tmp->ile = 1;
     tmp->next = *call;
     *call = tmp;
-    // free(tmp);
 }
 
-void store_add_call(char* top, char* name, listNode_t** lista) {
-    listNode_t* tmp = *lista;
+void store_add_call(char* top, char* name, listFunctions_t* lista) {
+    listFunctions_t tmp = *lista;
     while (tmp != NULL) {
         if (strcmp(tmp->name, name) == 0) {
             addCallElem(tmp->callHead, top);
@@ -158,7 +156,6 @@ void freeList(listNode_t** head) {
     while ((tmp = *head) != NULL) {
         *head = (*head)->next;
         freeLinesList(tmp->linesHead);
-        freeCallList(tmp->callHead);
         free(tmp->name);
         free(tmp);
     }
@@ -170,6 +167,7 @@ void freeFunctionList(listFunctions_t* head) {
     while ((tmp = *head) != NULL) {
         *head = (*head)->next;
         free(tmp->name);
+        freeCallList(tmp->callHead);
         free(tmp);
     }
     free(head);
