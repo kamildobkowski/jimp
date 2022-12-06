@@ -65,7 +65,11 @@ lexem_t alex_nextLexem(void) {
             ident[0] = c;
             while (isalnum(c = fgetc(ci)) || c == '_') ident[i++] = c;
             ident[i] = '\0';
-            fseek(ci, -1L, SEEK_CUR);
+
+            printf("[%s]\n", ident);
+            if (c != EOF) {
+                fseek(ci, -1L, SEEK_CUR);
+            }
             return isKeyword(ident) ? OTHER : IDENT;
         } else if (c == '"') {
             /* Uwaga: tu trzeba jeszcze poprawic obsluge nowej linii w trakcie

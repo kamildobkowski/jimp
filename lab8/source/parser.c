@@ -53,18 +53,31 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
 
                     continue;
                 }
+                if (*get_fun_stack() != NULL)
+                    printf(
+                        "Plik: %s [Linia: %d, Nawiasy: %d, Braket: %d, Id: "
+                        "%s, Lex: %d]\n",
+                        inpname, alex_getLN(), npar, nbra, get_from_fun_stack(),
+                        lex);
+
             } break;
             case OPEPAR:
                 npar++;
-                printf("[%d %d]\n", npar, alex_getLN());
                 break;
             case CLOPAR: {  // zamykający nawias - to może być koniec prototypu,
                             // nagłówka albo wywołania
+                // Jeśli nie wykryjemy funkcji to kod się nie wykonuje
+                // Zapobiega używaniu bezsensownych nawiasów ()
                 if (flag == 0) {
+                    npar--;
                     break;
                 }
                 flag--;
-                if (*get_fun_stack() == NULL) break;
+                if (*get_fun_stack() == NULL) {
+                    npar--;
+                    break;
+                }
+
                 if (top_of_funstack() == npar) {
                     // sprawdzamy, czy liczba nawiasów bilansuje się z
                     // wierzchołkiem stosu funkcji jeśli tak, to
@@ -74,16 +87,19 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                     // ^ Nie powoduje blędów utraty pamięci
                     lexem_t nlex = alex_nextLexem();  // bierzemy nast leksem
 
+                    if (nlex == ERROR) {
+                        fprintf(stderr,
+                                "\nBUUUUUUUUUUUUUUUUUUUUUU!\n"
+                                "W pliku %s (linia %d) są błędy składni.\n"
+                                "Kończę!\n\n",
+                                inpname, alex_getLN());
+                        // free
+                        freeExit(in);
+                        return;
+                    }
                     // nast. leksem to klamra a więc mamy do czynienia z def.
                     // funkcji
                     if (nlex == OPEBRA) {
-                        nbra++;
-                        if (nbra != 1) {
-                            lex = alex_nextLexem();
-                            continue;
-                        }
-                    }
-                    if (nlex == OPEBRA && nbra == 1) {
                         store_add_fun(get_from_fun_stack(), alex_getLN(),
                                       inpname, listDef);
 
@@ -131,10 +147,22 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                         }
                         pop_from_fun_stack();
                     }
-
                     if (nlex == CLOPAR) {
+                        lex = nlex;
                         npar--;
                         continue;
+                    }
+                    if (nlex == CLOBRA) {
+                        lex = nlex;
+                        npar--;
+                        continue;
+                    }
+                    if (nlex == OPEBRA) {
+                        nbra++;
+                    }
+
+                    if (nlex == OPEPAR) {
+                        npar++;
                     }
                 }
                 npar--;
