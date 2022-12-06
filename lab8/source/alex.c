@@ -66,7 +66,7 @@ lexem_t alex_nextLexem(void) {
             while (isalnum(c = fgetc(ci)) || c == '_') ident[i++] = c;
             ident[i] = '\0';
 
-            printf("[%s]\n", ident);
+            // printf("[%s]\n", ident);
             if (c != EOF) {
                 fseek(ci, -1L, SEEK_CUR);
             }

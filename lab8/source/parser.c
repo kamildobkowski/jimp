@@ -53,12 +53,13 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
 
                     continue;
                 }
-                if (*get_fun_stack() != NULL)
-                    printf(
-                        "Plik: %s [Linia: %d, Nawiasy: %d, Braket: %d, Id: "
-                        "%s, Lex: %d]\n",
-                        inpname, alex_getLN(), npar, nbra, get_from_fun_stack(),
-                        lex);
+                // Printer testowy
+                // if (*get_fun_stack() != NULL)
+                //     printf(
+                //         "Plik: %s [Linia: %d, Nawiasy: %d, Braket: %d, Id: "
+                //         "%s, Lex: %d]\n",
+                //         inpname, alex_getLN(), npar, nbra,
+                //         get_from_fun_stack(), lex);
 
             } break;
             case OPEPAR:

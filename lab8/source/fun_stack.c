@@ -59,6 +59,7 @@ int top_of_funstack(void) {
 void pop_from_fun_stack() {
     Node temp = (*funStack);
     (*funStack) = (*funStack)->next;
+    free(temp->name);
     free(temp);
 }
 
