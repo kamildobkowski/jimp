@@ -9,17 +9,13 @@
 
 | Zadanie \ Osoba           | Kamil | Adrian | Poziom | Stopień Wykonania | Priorytet |
 | ------------------------- | :---: | :----: | :----: | :---------------: | :-------: |
-| Analizator leksykalny     |       |   x    | średni |  W sumie gotowy   |     2     |
-| Analizator składni        |   x   |        | trudny |     W trakcie     |     2     |
-| Kontener danych           |       |   x    | trudny |  W sumie gotowy   |     1     |
-| Funkcja main              |   x   |        | średni |                   |     3     |
-| lista funkcji pomijalnych |       |   x    | łatwy  |     Zrobiłem      |     4     |
-| Formatowanie wypisywannia |   x   |        | łatwy  |                   |     4     |
+| Analizator leksykalny     |       |   x    | średni |      Gotowy       |     2     |
+| Analizator składni        |   x   |        | trudny |      Gotowy       |     2     |
+| Kontener danych           |       |   x    | trudny |      Gotowy       |     1     |
+| Funkcja main              |   x   |        | średni |      Gotowy       |     3     |
+| lista funkcji pomijalnych |       |   x    | łatwy  |      Gotowy       |     4     |
+| Formatowanie wypisywannia |   x   |        | łatwy  |      Gotowy       |     4     |
 
-_funstack.c - dodano funkcje\
- fun_stack.h - dodano strukture\
- parser.h - dodano strukture list_t\
- parser.h - dodane prototypy funkcji store_add_
 
 <br/>
 
