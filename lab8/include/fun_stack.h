@@ -11,7 +11,7 @@ typedef struct eStack {
     int braLevel;
     // Wskaźnik na następny element
     struct eStack *next;
-} *Node;
+} * Node;
 
 // Funkcje dotyczące struktury Node
 
