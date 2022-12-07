@@ -25,30 +25,43 @@ void store_add_pri(listFunctions_t* printFunctions, char* name) {
         }
         tempFunctions = tempFunctions->next;
     }
+
     tempFunctions = initPriElement(name);
-    tempFunctions->next = *printFunctions;
-    *printFunctions = tempFunctions;
+    tempFunctions->next = NULL;
+    if (*printFunctions == NULL) {
+        *printFunctions = tempFunctions;
+    } else {
+        listFunctions_t temp = *printFunctions;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = tempFunctions;
+    }
 }
 
 void addListElem(listNode_t** lista, listNode_t* element) {
     element->next = NULL;
-    if (lista == NULL) {
-        lista = malloc(sizeof(*lista));
+    if (*lista == NULL) {
         *lista = element;
     } else {
-        element->next = *lista;
-        *lista = element;
+        listNode_t* temp = *lista;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = element;
     }
 }
 
 void addLinesElem(linesNode_t** lines, linesNode_t* element) {
     element->next = NULL;
-    if (lines == NULL) {
-        lines == malloc(sizeof(*lines));
+    if (*lines == NULL) {
         *lines = element;
     } else {
-        element->next = *lines;
-        *lines = element;
+        linesNode_t* temp = *lines;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = element;
     }
 }
 

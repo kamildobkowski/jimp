@@ -20,7 +20,7 @@ int flag = 0;
 void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
     FILE *in = fopen(inpname, "r");
     if (in == NULL) {
-        printf("DUPA DUPA DUPA\n");
+        fprintf(stderr, "Plik o scierzce: [%s] nie istnieje :(\n", inpname);
         return;
     }
 
@@ -43,6 +43,7 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                     npar++;
                     put_on_fun_stack(iname, npar, nbra);
                     store_add_pri(printFunctions, get_from_fun_stack());
+                    // printf("[%s %d]\n", iname, npar);
                     flag++;
                     //  odłóż na stos funkcje i bilans
                     //  nawiasów stos f. jest niezbędny,
@@ -50,16 +51,8 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                     //  typu f1( 5, f2( a ), f3( b ) )
                 } else {  // nie nawias, czyli nie funkcja
                     lex = nlex;
-
                     continue;
                 }
-                // Printer testowy
-                // if (*get_fun_stack() != NULL)
-                //     printf(
-                //         "Plik: %s [Linia: %d, Nawiasy: %d, Braket: %d, Id: "
-                //         "%s, Lex: %d]\n",
-                //         inpname, alex_getLN(), npar, nbra,
-                //         get_from_fun_stack(), lex);
 
             } break;
             case OPEPAR:
@@ -79,6 +72,9 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                     break;
                 }
 
+                // printf("%s, %d, %d, n: %d, f: %s\n", alex_ident(), npar,
+                //        alex_getLN(), top_of_funstack(),
+                //        get_from_fun_stack());
                 if (top_of_funstack() == npar) {
                     // sprawdzamy, czy liczba nawiasów bilansuje się z
                     // wierzchołkiem stosu funkcji jeśli tak, to
@@ -135,10 +131,8 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
 
                         store_add_fun(get_from_fun_stack(), alex_getLN(),
                                       inpname, listCall);
-                        // printf("[%s, %d, %d, %d]\n", get_from_fun_stack(),
-                        // npar,
-                        //        nbra, alex_getLN());
                         // printMainStack();
+                        // printf("\n");
                         Node tmpStack = *get_fun_stack();
                         tmpStack = tmpStack->next;
                         while (tmpStack != NULL) {
@@ -173,6 +167,15 @@ void analizatorSkladni(char *inpname) {  // przetwarza plik inpname
                 break;
             case CLOBRA: {
                 nbra--;
+
+                // Printer testowy
+                // if (*get_fun_stack() != NULL)
+                //     printf(
+                //         "Plik: %s [Linia: %d, Nawiasy: %d, Braket: %d, Id: "
+                //         "%s, Lex: %d]\n",
+                //         inpname, alex_getLN(), npar, nbra,
+                //         get_from_fun_stack(), lex);
+
                 if (*get_fun_stack() == NULL) break;
                 if ((*get_fun_stack())->braLevel == nbra) {
                     addEndOfDef(listDef, get_from_fun_stack(), alex_getLN());

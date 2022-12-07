@@ -17,16 +17,17 @@ void alex_init4file(FILE *in) {
 
 int isKeyword(char *indentyfier) {
     const char *keywords[] = {
-        "auto",     "break",    "case",    "char",   "continue", "do",
-        "default",  "const",    "double",  "else",   "enum",     "extern",
-        "for",      "if",       "goto",    "float",  "int",      "long",
-        "register", "return",   "signed",  "static", "sizeof",   "short",
-        "struct",   "switch",   "typedef", "union",  "void",     "while",
-        "volatile", "unsigned", "include"
+        "auto",     "break",   "case",   "char",   "continue", "do",
+        "default",  "const",   "double", "else",   "enum",     "extern",
+        "for",      "if",      "goto",   "float",  "int",      "long",
+        "register", "return",  "signed", "static", "short",    "struct",
+        "switch",   "typedef", "union",  "void",   "while",    "volatile",
+        "unsigned", "include"
 
-    };
+    }; /*"sizeof" zostało usunięte z powodu niemożliwości wykrycia wystąpienia
+          błędu przy analizie*/
     int i;
-    for (i = 0; i < 33; i++) {
+    for (i = 0; i < 32; i++) {
         if (strcmp(indentyfier, keywords[i]) == 0) {
             return 1;
         }
@@ -70,6 +71,7 @@ lexem_t alex_nextLexem(void) {
             if (c != EOF) {
                 fseek(ci, -1L, SEEK_CUR);
             }
+
             return isKeyword(ident) ? OTHER : IDENT;
         } else if (c == '"') {
             /* Uwaga: tu trzeba jeszcze poprawic obsluge nowej linii w trakcie
