@@ -9,7 +9,7 @@ TDIR=./testSourceFile
 
 # LIBS=-lm # Można dodać dla math.c
 
-LIBS=-ggdb
+#LIBS=-ggdb -lm
 
 _DEPS = alex.h fun_stack.h parser.h printAlex.h storage.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
