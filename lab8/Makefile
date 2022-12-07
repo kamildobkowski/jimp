@@ -42,5 +42,8 @@ clean:
 
 test: 
 	./$(TDIR)/tests.sh $(TDIR)
+
+test-repair:
+	sed -i -e 's/\r$$//' $(TDIR)/tests.sh
 	
 
