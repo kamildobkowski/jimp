@@ -20,7 +20,7 @@ Node initNode(char *funame, int par_level, int bra_level) {
         exit(1);
     }
     e->name = malloc(sizeof(*e->name) * (strlen(funame) + 1));
-    strcpy(e->name, funame);
+    strcpy(e->name, funame); 
     e->parLevel = par_level;
     e->braLevel = bra_level;
     e->next = NULL;

@@ -115,6 +115,7 @@ callNode_t* initCallNode(char* name) {
     tmp->name = malloc(sizeof(tmp->name) * strlen(name) + 1);
     strcpy(tmp->name, name);
     tmp->next = NULL;
+    tmp->ile = 1;
     return tmp;
 }
 
@@ -127,10 +128,16 @@ void addCallElem(callNode_t** call, char* name) {
         }
         tmp = tmp->next;
     }
-    tmp = initCallNode(name);
-    tmp->ile = 1;
-    tmp->next = *call;
-    *call = tmp;
+    if(*call == NULL){
+        *call = initCallNode(name);
+    }else{
+        callNode_t * temp = *call;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = initCallNode(name);
+        temp->next->next = NULL;
+    }
 }
 
 void store_add_call(char* top, char* name, listFunctions_t* lista) {

@@ -1,5 +1,8 @@
 # Analizator składni
 
+Wywołania są wypisywane w złej kolejnosci!!
+
+
 > ## JIMP zadanie z laboratorium nr 8
 
 <br/>
