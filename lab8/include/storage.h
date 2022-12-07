@@ -25,8 +25,7 @@ typedef struct call {
 typedef struct e {
     char* name;
     linesNode_t** linesHead;
-    callNode_t** callHead;  // lista wywolan
-    struct e* next;         // wskaznik na nastepny element
+    struct e* next;  // wskaznik na nastepny element
 } listNode_t;
 
 // Struktura listy przetrzymująca wyłącznie nazwy funkcji
@@ -35,14 +34,15 @@ typedef struct e {
 // nazwie
 typedef struct fun {
     char* name;
-    struct fun* next;  // wskaznik na nastepny element
+    callNode_t** callHead;  // lista wywolan
+    struct fun* next;       // wskaznik na nastepny element
 }* listFunctions_t;
 
 // Funkcja dodająca calla innych funkcji w funkcji do listy
 void addCallElem(callNode_t** call, char* element);
 
 // Funkcja dodająca do listy przechowującej wywołania funkcji
-void store_add_call(char* top, char* name, listNode_t** lista);
+void store_add_call(char* top, char* name, listFunctions_t* lista);
 
 // Funkcja dodaje elementy listy przechowującej
 // SelfCalle | Prototypy | Wywołania
@@ -60,6 +60,9 @@ int store_add_fun(char* top, int line_num, char* inpname, listNode_t** list);
 
 // Funkcja dodająca do listy nazw funkcji wypisywanych element
 void store_add_pri(listFunctions_t* printFunctions, char* name);
+
+// Funkcja dodająca końcową linie do definicji
+void addEndOfDef(listNode_t** list, char* top, int line_num);
 
 // Funkcje czysczące listy z pamięci
 void freeLinesList(linesNode_t** head);

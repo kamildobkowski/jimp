@@ -17,7 +17,8 @@ void printFiles() {
         printThreeType(functionName, "Prototypy", *getListProto());
         printThreeType(functionName, "Definicje", *getListDef());
         printThreeType(functionName, "Uzycia   ", *getListCall());
-        printSomeCall(functionName);
+        printf("\tWywołania:\n");
+        printInFunctionCall(tempFunctionList->callHead);
         printf("\n");
         tempFunctionList = tempFunctionList->next;
     }
@@ -28,18 +29,6 @@ void printThreeType(char* name, char* message, listNode_t* temp) {
     while (temp != NULL) {
         if (strcmp(temp->name, name) == 0) {
             printFileLocalisation(temp->linesHead);
-            return;
-        }
-        temp = temp->next;
-    }
-}
-
-void printSomeCall(char* name) {
-    printf("\tWywoluje:\n");
-    listNode_t* temp = *getListCall();
-    while (temp != NULL) {
-        if (strcmp(temp->name, name) == 0) {
-            printInFunctionCall(temp->callHead);
             return;
         }
         temp = temp->next;
@@ -71,4 +60,14 @@ void freeExit(FILE* in) {
     freeElements();
     fclose(in);
     exit(1);
+}
+
+void printMainStack() {
+    Node temp = *get_fun_stack();
+    printf("[Start]");
+    while (temp != NULL) {
+        printf("-> [%s]", temp->name);
+        temp = temp->next;
+    }
+    printf("\n");
 }

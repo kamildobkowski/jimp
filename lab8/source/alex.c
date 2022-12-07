@@ -5,13 +5,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int ln = 0;
+static int ln;
 static char ident[256];
 static FILE *ci = NULL;
 
 // zeruje zmienne dla nowego pliku zmienne dla pliku
 void alex_init4file(FILE *in) {
-    ln = 0;
+    ln = 1;
     ci = in;
 }
 
@@ -44,7 +44,6 @@ lexem_t alex_nextLexem(void) {
         //  Ignorujemy wszystkie spacje w pliku
         if (c == '\n') {
             ln++;
-            printf("%d\n", ln);
             continue;
         } else if (isspace(c))
             continue;
@@ -66,7 +65,11 @@ lexem_t alex_nextLexem(void) {
             ident[0] = c;
             while (isalnum(c = fgetc(ci)) || c == '_') ident[i++] = c;
             ident[i] = '\0';
-            fseek(ci, -1L, SEEK_CUR);
+
+            // printf("[%s]\n", ident);
+            if (c != EOF) {
+                fseek(ci, -1L, SEEK_CUR);
+            }
             return isKeyword(ident) ? OTHER : IDENT;
         } else if (c == '"') {
             /* Uwaga: tu trzeba jeszcze poprawic obsluge nowej linii w trakcie
@@ -83,6 +86,7 @@ lexem_t alex_nextLexem(void) {
             if (c = fgetc(ci) == '/') {
                 while (c = fgetc(ci) != '\n')
                     ;
+                ln++;
                 continue;
             } else if (c == '*') {
                 c = fgetc(ci);
