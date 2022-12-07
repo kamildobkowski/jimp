@@ -31,15 +31,16 @@ $(LDIR)/a.out: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 
-.PHONY: easy-init clean test-easy
+.PHONY: init clean test
 
-easy-init:
+init:
 	mkdir -p lib out
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
+	rm -f $(ODIR)/*.o
+	rm -f $(LDIR)/*.out 
 
-test-easy:
+test: 
 	./$(TDIR)/tests.sh $(TDIR)
 	
 

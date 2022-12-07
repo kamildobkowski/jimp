@@ -2,7 +2,6 @@
 
 Wywołania są wypisywane w złej kolejnosci!!
 
-
 > ## JIMP zadanie z laboratorium nr 8
 
 <br/>
@@ -19,23 +18,17 @@ Wywołania są wypisywane w złej kolejnosci!!
 | lista funkcji pomijalnych |       |   x    | łatwy  |      Gotowy       |     4     |
 | Formatowanie wypisywannia |   x   |        | łatwy  |      Gotowy       |     4     |
 
-
 <br/>
 
 > ## Uruchomianie
 >
 > -   Programu\
->     W konsoli obsługującek Makefile oraz kompiler c wpisz
+>     W konsoli obsługującek Makefile oraz kompiler C wpisz
 >
 > ```bash
->    make easy-init
+>    make init
 >    make
-> ```
->
-> -   Testu
->
-> ```bash
->    make test-easy
+>    make test
 > ```
 >
 > \*
