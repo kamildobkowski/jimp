@@ -24,10 +24,16 @@
 >     W konsoli obsługującek Makefile oraz kompiler C wpisz
 >
 > ```bash
->    make init
->    make
->    make [ test-all / test ]
+>    make init                  # Wymagane
+>    make                       # Kompilacja
+>    make [ test-all / test ]   # Jedna z
 > ```
 >
-> test-all by wystestować odrazu wszystkie pliki w folderze testSourceFile
-> test by wybrać pliki poprzez wpisanie ich nazwy w konsoli
+> `test-all` by wystestować odrazu wszystkie pliki w folderze testSourceFile \
+> `test` by wybrać pliki poprzez wpisanie ich nazwy w konsoli
+>
+> W razie problemów z uruchomieniem komendy `test-all` | `test` należy użyć komedy `test-repair`
+>
+> Program posiada także komendy:
+> `clean` - czyszczenie folderu /lib oraz /out z skomilowanych programów
+> `init` - stworzenie niezbednych folderów do uruchomeina programu
