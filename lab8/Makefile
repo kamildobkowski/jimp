@@ -6,6 +6,7 @@ ODIR=./out
 LDIR =./lib
 SDIR=./source
 TDIR=./testSourceFile
+RDIR=./scripts
 
 # LIBS=-lm # Można dodać dla math.c
 
@@ -31,7 +32,7 @@ $(LDIR)/a.out: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 
-.PHONY: init clean test
+.PHONY: init clean test test-all test-repair 
 
 init:
 	mkdir -p lib out
@@ -40,10 +41,16 @@ clean:
 	rm -f $(ODIR)/*.o
 	rm -f $(LDIR)/*.out 
 
-test: 
-	./$(TDIR)/tests.sh $(TDIR)
+
+test:
+	$(RDIR)/test.sh $(TDIR)
+
+
+test-all: 
+	$(RDIR)/tests.sh $(TDIR)
 
 test-repair:
-	sed -i -e 's/\r$$//' $(TDIR)/tests.sh
+	sed -i -e 's/\r$$//' $(RDIR)/tests.sh
+	sed -i -e 's/\r$$//' $(RDIR)/test.sh
 	
 
