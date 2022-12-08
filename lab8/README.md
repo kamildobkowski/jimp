@@ -1,7 +1,5 @@
 # Analizator składni
 
-Wywołania są wypisywane w złej kolejnosci!!
-
 > ## JIMP zadanie z laboratorium nr 8
 
 <br/>
@@ -28,7 +26,8 @@ Wywołania są wypisywane w złej kolejnosci!!
 > ```bash
 >    make init
 >    make
->    make test
+>    make [ test-all / test ]
 > ```
 >
-> \*
+> test-all by wystestować odrazu wszystkie pliki w folderze testSourceFile
+> test by wybrać pliki poprzez wpisanie ich nazwy w konsoli
