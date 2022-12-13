@@ -1,10 +1,9 @@
-#include "../include/storage.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "../include/parser.h"
+#include "../include/storage.h"
 
 // Funkcja inicjująca element
 listFunctions_t initPriElement(char* name) {
@@ -25,43 +24,30 @@ void store_add_pri(listFunctions_t* printFunctions, char* name) {
         }
         tempFunctions = tempFunctions->next;
     }
-
     tempFunctions = initPriElement(name);
-    tempFunctions->next = NULL;
-    if (*printFunctions == NULL) {
-        *printFunctions = tempFunctions;
-    } else {
-        listFunctions_t temp = *printFunctions;
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = tempFunctions;
-    }
+    tempFunctions->next = *printFunctions;
+    *printFunctions = tempFunctions;
 }
 
 void addListElem(listNode_t** lista, listNode_t* element) {
     element->next = NULL;
-    if (*lista == NULL) {
+    if (lista == NULL) {
+        lista = malloc(sizeof(*lista));
         *lista = element;
     } else {
-        listNode_t* temp = *lista;
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = element;
+        element->next = *lista;
+        *lista = element;
     }
 }
 
 void addLinesElem(linesNode_t** lines, linesNode_t* element) {
     element->next = NULL;
-    if (*lines == NULL) {
+    if (lines == NULL) {
+        lines == malloc(sizeof(*lines));
         *lines = element;
     } else {
-        linesNode_t* temp = *lines;
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = element;
+        element->next = *lines;
+        *lines = element;
     }
 }
 
@@ -108,6 +94,7 @@ void addEndOfDef(listNode_t** list, char* top, int line_num) {
     }
     if (tmp == NULL) return;
     (*tmp->linesHead)->end = line_num;
+    // free(tmp);
 }
 
 callNode_t* initCallNode(char* name) {
@@ -115,7 +102,6 @@ callNode_t* initCallNode(char* name) {
     tmp->name = malloc(sizeof(tmp->name) * strlen(name) + 1);
     strcpy(tmp->name, name);
     tmp->next = NULL;
-    tmp->ile = 1;
     return tmp;
 }
 
@@ -128,16 +114,11 @@ void addCallElem(callNode_t** call, char* name) {
         }
         tmp = tmp->next;
     }
-    if(*call == NULL){
-        *call = initCallNode(name);
-    }else{
-        callNode_t * temp = *call;
-        while (temp->next != NULL) {
-            temp = temp->next;
-        }
-        temp->next = initCallNode(name);
-        temp->next->next = NULL;
-    }
+    tmp = initCallNode(name);
+    tmp->ile = 1;
+    tmp->next = *call;
+    *call = tmp;
+    // free(tmp);
 }
 
 void store_add_call(char* top, char* name, listFunctions_t* lista) {

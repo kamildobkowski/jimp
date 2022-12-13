@@ -23,4 +23,6 @@ void printFiles();
 
 // funkcja pozwalajaca na wyjście wyjście z programu wcześniej czyszcząc dane
 void freeExit(FILE* in);
+
+void printMainStack();
 #endif

@@ -6,10 +6,11 @@ ODIR=./out
 LDIR =./lib
 SDIR=./source
 TDIR=./testSourceFile
+RDIR=./scripts
 
 # LIBS=-lm # Można dodać dla math.c
 
-LIBS=-ggdb
+#LIBS=-ggdb -lm
 
 _DEPS = alex.h fun_stack.h parser.h printAlex.h storage.h
 DEPS = $(patsubst %,$(IDIR)/%,$(_DEPS))
@@ -31,15 +32,25 @@ $(LDIR)/a.out: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(LIBS)
 
 
-.PHONY: easy-init clean test-easy
+.PHONY: init clean test test-all test-repair 
 
-easy-init:
+init:
 	mkdir -p lib out
 
 clean:
-	rm -f $(ODIR)/*.o *~ core $(INCDIR)/*~ 
+	rm -f $(ODIR)/*.o
+	rm -f $(LDIR)/*.out 
 
-test-easy:
-	./$(TDIR)/tests.sh $(TDIR)
+
+test:
+	$(RDIR)/test.sh $(TDIR)
+
+
+test-all: 
+	$(RDIR)/tests.sh $(TDIR)
+
+test-repair:
+	sed -i -e 's/\r$$//' $(RDIR)/tests.sh
+	sed -i -e 's/\r$$//' $(RDIR)/test.sh
 	
 

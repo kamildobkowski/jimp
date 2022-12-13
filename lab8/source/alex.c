@@ -5,28 +5,29 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int ln = 0;
+static int ln;
 static char ident[256];
 static FILE *ci = NULL;
 
 // zeruje zmienne dla nowego pliku zmienne dla pliku
 void alex_init4file(FILE *in) {
-    ln = 0;
+    ln = 1;
     ci = in;
 }
 
 int isKeyword(char *indentyfier) {
     const char *keywords[] = {
-        "auto",     "break",    "case",    "char",   "continue", "do",
-        "default",  "const",    "double",  "else",   "enum",     "extern",
-        "for",      "if",       "goto",    "float",  "int",      "long",
-        "register", "return",   "signed",  "static", "sizeof",   "short",
-        "struct",   "switch",   "typedef", "union",  "void",     "while",
-        "volatile", "unsigned", "include"
+        "auto",     "break",   "case",   "char",   "continue", "do",
+        "default",  "const",   "double", "else",   "enum",     "extern",
+        "for",      "if",      "goto",   "float",  "int",      "long",
+        "register", "return",  "signed", "static", "short",    "struct",
+        "switch",   "typedef", "union",  "void",   "while",    "volatile",
+        "unsigned", "include"
 
-    };
+    }; /*"sizeof" zostało usunięte z powodu niemożliwości wykrycia wystąpienia
+          błędu przy analizie*/
     int i;
-    for (i = 0; i < 33; i++) {
+    for (i = 0; i < 32; i++) {
         if (strcmp(indentyfier, keywords[i]) == 0) {
             return 1;
         }
@@ -65,7 +66,12 @@ lexem_t alex_nextLexem(void) {
             ident[0] = c;
             while (isalnum(c = fgetc(ci)) || c == '_') ident[i++] = c;
             ident[i] = '\0';
-            fseek(ci, -1L, SEEK_CUR);
+
+            // printf("[%s]\n", ident);
+            if (c != EOF) {
+                fseek(ci, -1L, SEEK_CUR);
+            }
+
             return isKeyword(ident) ? OTHER : IDENT;
         } else if (c == '"') {
             /* Uwaga: tu trzeba jeszcze poprawic obsluge nowej linii w trakcie

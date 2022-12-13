@@ -9,34 +9,31 @@
 
 | Zadanie \ Osoba           | Kamil | Adrian | Poziom | Stopień Wykonania | Priorytet |
 | ------------------------- | :---: | :----: | :----: | :---------------: | :-------: |
-| Analizator leksykalny     |       |   x    | średni |  W sumie gotowy   |     2     |
-| Analizator składni        |   x   |        | trudny |     W trakcie     |     2     |
-| Kontener danych           |       |   x    | trudny |  W sumie gotowy   |     1     |
-| Funkcja main              |   x   |        | średni |                   |     3     |
-| lista funkcji pomijalnych |       |   x    | łatwy  |     Zrobiłem      |     4     |
-| Formatowanie wypisywannia |   x   |        | łatwy  |                   |     4     |
-
-_funstack.c - dodano funkcje\
- fun_stack.h - dodano strukture\
- parser.h - dodano strukture list_t\
- parser.h - dodane prototypy funkcji store_add_
+| Analizator leksykalny     |       |   x    | średni |      Gotowy       |     2     |
+| Analizator składni        |   x   |        | trudny |      Gotowy       |     2     |
+| Kontener danych           |       |   x    | trudny |      Gotowy       |     1     |
+| Funkcja main              |   x   |        | średni |      Gotowy       |     3     |
+| lista funkcji pomijalnych |       |   x    | łatwy  |      Gotowy       |     4     |
+| Formatowanie wypisywannia |   x   |        | łatwy  |      Gotowy       |     4     |
 
 <br/>
 
 > ## Uruchomianie
 >
 > -   Programu\
->     W konsoli obsługującek Makefile oraz kompiler c wpisz
+>     W konsoli obsługującek Makefile oraz kompiler C wpisz
 >
 > ```bash
->    make easy-init
->    make
+>    make init                  # Wymagane
+>    make                       # Kompilacja
+>    make [ test-all / test ]   # Jedna z
 > ```
 >
-> -   Testu
+> `test-all` by wystestować odrazu wszystkie pliki w folderze testSourceFile \
+> `test` by wybrać pliki poprzez wpisanie ich nazwy w konsoli
 >
-> ```bash
->    make test-easy
-> ```
+> W razie problemów z uruchomieniem komendy `test-all` | `test` należy użyć komedy `test-repair`
 >
-> \*
+> Program posiada także komendy:
+> `clean` - czyszczenie folderu /lib oraz /out z skomilowanych programów
+> `init` - stworzenie niezbednych folderów do uruchomeina programu
