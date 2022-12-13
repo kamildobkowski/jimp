@@ -1,4 +1,6 @@
 #include "gauss.h"
+
+#include "backsubst.h"
 #include "mat_io.h"
 /**
  * Zwraca 0 - elimnacja zakonczona sukcesem
@@ -14,5 +16,5 @@ int eliminate(Matrix *mat, Matrix *b) {
             b->data[w][0] -= m * b->data[l][0];
         }
     }
-    return 0; 
+    return 0;
 }
