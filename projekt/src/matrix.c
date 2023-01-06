@@ -133,7 +133,7 @@ void xchg_cols(matrix_t *m, int i, int j) {
         }
     }
 }
-matrix_t *multiply_matrix(matrix_t *a, matrix_t *b) {
+matrix_t *multiply_matrix(matrix_t *a, int ai, matrix_t *b) {
     double s;
     int i, j;
     if (a->cn != b->cn || a->rn != b->cn) return NULL;
@@ -148,14 +148,14 @@ matrix_t *multiply_matrix(matrix_t *a, matrix_t *b) {
 }
 /*int suma += a->e[i][do i - 1] * b->e[1][do i - 1];
 int suma = a->e[i][od i + 1 do końca] * b->e[1][od i + 1 do końca];*/
-matrix_t *dot1(matrix_t *a, int ai, matrix_t *b) { 
-	int suma = 0;
+double dot1(matrix_t *a, int ai, matrix_t *b) { 
+	double suma = 0;
     for (int i = 0; i < ai; i++) {
 		suma += a->e[a->rn * ai + i] * b->e[i];
 	}
 	return suma;
 }
-matrix_t *dot2(matrix_t *a, int ai, matrix_t *b) {
+double dot2(matrix_t *a, int ai, matrix_t *b) {
 	int suma = 0;
 	for(int i = ai + 1; i < a->rn; i++) {
 		suma+=a->e[a->rn * ai + i] * b->e[i];
