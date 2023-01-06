@@ -48,5 +48,6 @@ int *pivot_get_inv_per(matrix_t *, int *row_per);
 double dot1(matrix_t *a, int ai, matrix_t *b);
 double dot2(matrix_t *a, int ai, matrix_t *b);
 matrix_t *multiply_matrix(matrix_t *a, int ai, matrix_t *b);
+void freeMatrix(matrix_t *m);
 
 #endif
