@@ -4,9 +4,9 @@
 #include "matrix.h"
 #include "misc.h"
 
-int main(int argc, char *argv) {
+int main(int argc, char **argv) {
   if(argc<2) {
-    fprintf(stdout, "Bledne wywolanie programu\nPo wywolaniu podaj 2 nazwy plikow", stderr);
+    fprintf(stderr, "Bledne wywolanie programu\nPo wywolaniu podaj 2 nazwy plikow");
     return 1;
   }
   FILE *mA = fopen(argv[1], "r");
@@ -16,7 +16,7 @@ int main(int argc, char *argv) {
   fclose(mA);
   fclose(mB);
   if (a == NULL || b == NULL) {
-    fprintf(stdout, "Błąd podczas czytania z pliku!", stderr);
+    fprintf(stderr, "Błąd podczas czytania z pliku!");
     if (a != NULL) {
       free(a);
     } else if (b != NULL) {
@@ -24,7 +24,7 @@ int main(int argc, char *argv) {
     }
   }
   if(a->cn != a->rn) {
-    fprintf(stdout, "Macierz w 1 pliku musi być kwadratowa!", stderr);
+    fprintf(stderr, "Macierz w 1 pliku musi być kwadratowa!");
     if (a != NULL) {
       free(a);
     } 

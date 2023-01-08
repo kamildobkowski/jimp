@@ -137,8 +137,8 @@ matrix_t *multiply_matrix(matrix_t *a, int ai, matrix_t *b) {
   int i, j;
   if (a->cn != b->cn || a->rn != b->cn) return NULL;
   matrix_t *c = make_matrix(a->cn, a->rn);
-  for (int i = 0; i < c->cn; i++) {
-    for (int j = 0; j < c->rn; j++) {
+  for (i = 0; i < c->cn; i++) {
+    for (j = 0; j < c->rn; j++) {
       s = *(a->e + i * a->cn + j) * *(b->e + i * a->cn + j);
       *(c->e + i * c->cn + j) = s;
     }
