@@ -4,12 +4,12 @@
 #include <stdio.h>
 // Struktura macierzy
 typedef struct {
-    // Ilość wierszy
-    int rn;
-    // Ilość kolumn
-    int cn;
-    // tablica wartości
-    double *e;
+  // Ilość wierszy
+  int rn;
+  // Ilość kolumn
+  int cn;
+  // tablica wartości
+  double *e;
 } matrix_t;
 
 matrix_t *make_matrix(int rn, int cn);
@@ -45,7 +45,9 @@ void pivot_ge_in_situ_matrix(matrix_t *);
 matrix_t *symm_pivot_ge_matrix(matrix_t *, int *per);
 
 int *pivot_get_inv_per(matrix_t *, int *row_per);
-matrix_t *dot(matrix_t *a, matrix_t *b);
+double dot1(matrix_t *a, int ai, matrix_t *b);
+double dot2(matrix_t *a, int ai, matrix_t *b);
 matrix_t *multiply_matrix(matrix_t *a, int ai, matrix_t *b);
+void freeMatrix(matrix_t *m);
 
 #endif
