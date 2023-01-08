@@ -4,20 +4,34 @@
 #include "matrix.h"
 #include "misc.h"
 
-int main() {
-  FILE *mA = fopen("data/a2", "r");
-  FILE *mB = fopen("data/b2", "r");
+int main(int argc, char *argv) {
+  if(argc<2) {
+    fprintf(stdout, "Bledne wywolanie programu\nPo wywolaniu podaj 2 nazwy plikow", stderr);
+    return 1;
+  }
+  FILE *mA = fopen(argv[1], "r");
+  FILE *mB = fopen(argv[2], "r");
   matrix_t *a = read_matrix(mA);
   matrix_t *b = read_matrix(mB);
   fclose(mA);
   fclose(mB);
   if (a == NULL || b == NULL) {
-    printf("Błąd podczas czytania z pliku!!");
+    fprintf(stdout, "Błąd podczas czytania z pliku!", stderr);
     if (a != NULL) {
       free(a);
     } else if (b != NULL) {
       free(b);
     }
+  }
+  if(a->cn != a->rn) {
+    fprintf(stdout, "Macierz w 1 pliku musi być kwadratowa!", stderr);
+    if (a != NULL) {
+      free(a);
+    } 
+    if (b != NULL) {
+      free(b);
+    }
+    return 2;
   }
   matrix_t *x = make_matrix(1, b->cn);
 

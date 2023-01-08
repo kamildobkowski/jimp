@@ -3,6 +3,7 @@ all:
 
 matrix.o: matrix.h
 
+misc.o: misc.h
 
 .PHONY: clean run
 
